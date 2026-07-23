@@ -1,0 +1,1913 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light" />
+    <title>Crudo Store</title>
+    <style>
+      :root {
+        --bg: #f7f7f5;
+        --surface: #fff;
+        --ink: #18201c;
+        --muted: #59635d;
+        --line: #c9d0ca;
+        --accent: #235d3b;
+        --accent-ink: #fff;
+        --warning: #8a4b00;
+        --danger: #a42222;
+        --focus: #075fcc;
+        --radius: 10px;
+        --shadow: 0 2px 10px #18201c12;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--ink);
+        font:
+          16px/1.5 system-ui,
+          -apple-system,
+          "Segoe UI",
+          sans-serif;
+      }
+      button,
+      input,
+      textarea,
+      select {
+        font: inherit;
+      }
+      button,
+      input,
+      textarea,
+      select {
+        min-height: 44px;
+      }
+      button {
+        cursor: pointer;
+      }
+      button:disabled {
+        cursor: wait;
+        opacity: 0.65;
+      }
+      button:focus-visible,
+      a:focus-visible,
+      input:focus-visible,
+      textarea:focus-visible,
+      select:focus-visible {
+        outline: 3px solid var(--focus);
+        outline-offset: 2px;
+      }
+      a {
+        color: var(--accent);
+      }
+      .skip {
+        position: absolute;
+        left: 1rem;
+        top: -5rem;
+        z-index: 10;
+        padding: 0.7rem 1rem;
+        background: var(--ink);
+        color: #fff;
+      }
+      .skip:focus {
+        top: 1rem;
+      }
+      .wrap {
+        width: min(1120px, calc(100% - 2rem));
+        margin: auto;
+      }
+      .site-header {
+        border-bottom: 1px solid var(--line);
+        background: var(--surface);
+      }
+      .header-row {
+        min-height: 72px;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        flex-wrap: wrap;
+      }
+      .brand {
+        color: var(--ink);
+        text-decoration: none;
+        font-weight: 800;
+        letter-spacing: -0.03em;
+        font-size: 1.2rem;
+      }
+      nav {
+        display: flex;
+        gap: 0.25rem;
+      }
+      nav a {
+        padding: 0.6rem 0.75rem;
+        color: var(--muted);
+        text-decoration: none;
+        font-weight: 650;
+      }
+      nav a[aria-current="page"] {
+        color: var(--ink);
+        text-decoration: underline;
+        text-underline-offset: 4px;
+      }
+      .header-actions {
+        margin-left: auto;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        flex-wrap: wrap;
+      }
+      .connection {
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+        color: var(--muted);
+        font-size: 0.875rem;
+      }
+      .indicator {
+        width: 0.7rem;
+        height: 0.7rem;
+        border: 2px solid currentColor;
+        border-radius: 50%;
+      }
+      .indicator.online {
+        color: var(--accent);
+        background: var(--accent);
+      }
+      .indicator.offline {
+        color: var(--danger);
+        background: var(--danger);
+      }
+      main {
+        padding: 2.5rem 0 4rem;
+      }
+      .view[hidden],
+      [hidden] {
+        display: none !important;
+      }
+      .intro {
+        max-width: 680px;
+        margin-bottom: 2rem;
+      }
+      h1,
+      h2,
+      h3,
+      p {
+        margin-top: 0;
+      }
+      h1 {
+        font-size: clamp(2rem, 5vw, 3.25rem);
+        letter-spacing: -0.05em;
+        line-height: 1.08;
+        margin-bottom: 0.75rem;
+      }
+      h2 {
+        font-size: 1.45rem;
+        letter-spacing: -0.025em;
+      }
+      h3 {
+        font-size: 1.05rem;
+      }
+      .lede,
+      .muted {
+        color: var(--muted);
+      }
+      .section-head {
+        display: flex;
+        justify-content: space-between;
+        gap: 1rem;
+        align-items: baseline;
+        margin: 2.5rem 0 1rem;
+        flex-wrap: wrap;
+      }
+      .products {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 1rem;
+      }
+      .card,
+      .panel,
+      .stat {
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        background: var(--surface);
+        box-shadow: var(--shadow);
+      }
+      .product {
+        display: flex;
+        flex-direction: column;
+        padding: 1.2rem;
+        min-width: 0;
+      }
+      .product h3 {
+        margin: 0.8rem 0 0.4rem;
+      }
+      .product p {
+        color: var(--muted);
+        flex: 1;
+        overflow-wrap: anywhere;
+      }
+      .category,
+      .role,
+      .state {
+        display: inline-block;
+        width: max-content;
+        border: 1px solid #aab6ad;
+        border-radius: 999px;
+        padding: 0.15rem 0.55rem;
+        color: #314339;
+        font-size: 0.78rem;
+        font-weight: 700;
+      }
+      .price {
+        margin: 1.25rem 0 0.8rem;
+        font-size: 1.25rem;
+        font-weight: 800;
+        font-variant-numeric: tabular-nums;
+      }
+      .button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        min-height: 44px;
+        border: 1px solid var(--accent);
+        border-radius: 7px;
+        padding: 0.55rem 0.9rem;
+        background: var(--accent);
+        color: var(--accent-ink);
+        font-weight: 750;
+        text-decoration: none;
+      }
+      .button:hover {
+        background: #17472c;
+      }
+      .button.secondary {
+        border-color: #65736a;
+        background: var(--surface);
+        color: var(--ink);
+      }
+      .button.danger {
+        border-color: var(--danger);
+        background: var(--surface);
+        color: var(--danger);
+      }
+      .button.small {
+        min-height: 38px;
+        padding: 0.35rem 0.65rem;
+        font-size: 0.875rem;
+      }
+      .button-row {
+        display: flex;
+        gap: 0.75rem;
+        flex-wrap: wrap;
+      }
+      .notice {
+        margin: 1rem 0;
+        padding: 0.8rem 1rem;
+        border-left: 4px solid var(--warning);
+        background: #fff8eb;
+        color: #573300;
+      }
+      .notice[hidden] {
+        display: none;
+      }
+      .status {
+        min-height: 1.5rem;
+        margin: 1rem 0;
+        color: var(--muted);
+      }
+      .error {
+        min-height: 1.5rem;
+        margin: 1rem 0;
+        color: var(--danger);
+        font-weight: 650;
+      }
+      .dashboard-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1rem;
+      }
+      .stat {
+        padding: 1.2rem;
+      }
+      .stat strong {
+        display: block;
+        margin-top: 0.4rem;
+        font-size: 1.65rem;
+        font-variant-numeric: tabular-nums;
+      }
+      .panel {
+        padding: 1.2rem;
+        margin-top: 1rem;
+      }
+      .two-up {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+      }
+      form {
+        display: grid;
+        gap: 0.9rem;
+      }
+      label {
+        display: grid;
+        gap: 0.35rem;
+        font-weight: 700;
+      }
+      input,
+      textarea,
+      select {
+        width: 100%;
+        border: 1px solid #7b8980;
+        border-radius: 6px;
+        padding: 0.55rem 0.65rem;
+        background: #fff;
+        color: var(--ink);
+      }
+      textarea {
+        min-height: 100px;
+        resize: vertical;
+      }
+      .help {
+        margin: 0;
+        color: var(--muted);
+        font-size: 0.875rem;
+        font-weight: 400;
+      }
+      .table-wrap {
+        overflow-x: auto;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      caption {
+        padding: 0 0 0.75rem;
+        text-align: left;
+        color: var(--muted);
+      }
+      th,
+      td {
+        padding: 0.75rem;
+        border-bottom: 1px solid var(--line);
+        text-align: left;
+        vertical-align: top;
+      }
+      th {
+        font-size: 0.8rem;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        color: #435047;
+      }
+      td {
+        overflow-wrap: anywhere;
+      }
+      .license {
+        display: block;
+        max-width: 22rem;
+        overflow-wrap: anywhere;
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        font-size: 0.85rem;
+      }
+      .empty {
+        padding: 1.25rem 0;
+        color: var(--muted);
+      }
+      dialog {
+        width: min(500px, calc(100% - 2rem));
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        padding: 0;
+        color: var(--ink);
+        box-shadow: 0 12px 42px #0004;
+      }
+      dialog::backdrop {
+        background: #18201c88;
+      }
+      .dialog-content {
+        padding: 1.4rem;
+      }
+      .dialog-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: start;
+        gap: 1rem;
+      }
+      .close {
+        min-width: 44px;
+        border: 1px solid var(--line);
+        border-radius: 6px;
+        background: #fff;
+        color: var(--ink);
+        font-weight: 800;
+      }
+      .tabs {
+        display: flex;
+        border-bottom: 1px solid var(--line);
+        margin-bottom: 1rem;
+      }
+      .tab {
+        min-height: 44px;
+        border: 0;
+        border-bottom: 3px solid transparent;
+        background: transparent;
+        color: var(--muted);
+        padding: 0.5rem 0.8rem;
+        font-weight: 750;
+      }
+      .tab[aria-selected="true"] {
+        border-color: var(--accent);
+        color: var(--ink);
+      }
+      .api-control {
+        display: flex;
+        align-items: end;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+      }
+      .api-control label {
+        flex: 1 1 260px;
+        font-size: 0.8rem;
+      }
+      .api-control input {
+        min-width: 220px;
+      }
+      .api-control .help {
+        grid-column: 1 / -1;
+      }
+      .inline {
+        display: flex;
+        gap: 0.75rem;
+        align-items: end;
+        flex-wrap: wrap;
+      }
+      .inline label {
+        flex: 1 1 220px;
+      }
+      @media (max-width: 800px) {
+        .products {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+        .dashboard-grid {
+          grid-template-columns: 1fr;
+        }
+        .two-up {
+          grid-template-columns: 1fr;
+        }
+      }
+      @media (max-width: 500px) {
+        .wrap {
+          width: min(100% - 1.25rem, 1120px);
+        }
+        .header-row {
+          padding: 0.75rem 0;
+        }
+        .header-actions {
+          margin-left: 0;
+          width: 100%;
+          justify-content: space-between;
+        }
+        .products {
+          grid-template-columns: 1fr;
+        }
+        main {
+          padding-top: 1.75rem;
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        html {
+          scroll-behavior: auto;
+        }
+        *,
+        *::before,
+        *::after {
+          animation-duration: 0.01ms !important;
+          transition-duration: 0.01ms !important;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <a class="skip" href="#main">Skip to main content</a>
+    <header class="site-header">
+      <div class="wrap header-row">
+        <a class="brand" href="#store">Crudo Store</a>
+        <nav aria-label="Primary">
+          <a href="#store" data-nav="store" aria-current="page">Store</a
+          ><a href="#dashboard" data-nav="dashboard">Dashboard</a>
+        </nav>
+        <div class="header-actions">
+          <span class="connection"
+            ><span
+              class="indicator"
+              id="connectionDot"
+              aria-hidden="true"
+            ></span
+            ><span id="connectionText">Checking API</span></span
+          >
+          <form class="api-control" id="apiForm">
+            <label for="apiUrl"
+              >API base URL<input
+                id="apiUrl"
+                type="url"
+                inputmode="url"
+                aria-describedby="apiHelp"
+                required /></label
+            ><button class="button secondary small" type="submit">
+              Apply API
+            </button>
+            <p class="help" id="apiHelp">
+              Saved only on this device. Apply to reconnect and refresh.
+            </p>
+          </form>
+          <button
+            class="button secondary small"
+            id="accountButton"
+            type="button"
+          >
+            Sign in</button
+          ><button
+            class="button secondary small"
+            id="signOutButton"
+            type="button"
+            hidden
+          >
+            Sign out
+          </button>
+        </div>
+      </div>
+    </header>
+    <main class="wrap" id="main">
+      <div id="error" class="error" role="alert" aria-atomic="true"></div>
+      <div
+        id="status"
+        class="status"
+        role="status"
+        aria-live="polite"
+        aria-atomic="true"
+      ></div>
+      <section class="view" id="storeView" aria-labelledby="storeTitle">
+        <div class="intro">
+          <h1 id="storeTitle">Digital goods, delivered clearly.</h1>
+          <p class="lede">
+            Browse available products and purchase securely from your account
+            balance.
+          </p>
+        </div>
+        <div class="section-head">
+          <h2>Products</h2>
+          <button
+            class="button secondary small"
+            id="refreshProducts"
+            type="button"
+          >
+            Refresh products
+          </button>
+        </div>
+        <div class="products" id="products" aria-live="polite"></div>
+      </section>
+      <section
+        class="view"
+        id="dashboardView"
+        hidden
+        aria-labelledby="dashboardTitle"
+      >
+        <div class="section-head">
+          <div>
+            <h1 id="dashboardTitle">Your dashboard</h1>
+            <p class="lede" id="dashboardLead">
+              Sign in to manage your account.
+            </p>
+          </div>
+          <button
+            class="button secondary small"
+            id="refreshDashboard"
+            type="button"
+          >
+            Refresh dashboard
+          </button>
+        </div>
+        <div id="dashboardContent"></div>
+      </section>
+    </main>
+    <dialog id="authDialog" aria-labelledby="authTitle">
+      <div class="dialog-content">
+        <div class="dialog-head">
+          <h2 id="authTitle">Account access</h2>
+          <button
+            class="close"
+            type="button"
+            data-close="authDialog"
+            aria-label="Close account dialog"
+          >
+            Close
+          </button>
+        </div>
+        <div class="tabs" role="tablist" aria-label="Account access">
+          <button
+            class="tab"
+            type="button"
+            role="tab"
+            id="loginTab"
+            aria-selected="true"
+            aria-controls="loginPanel"
+            tabindex="0"
+          >
+            Sign in</button
+          ><button
+            class="tab"
+            type="button"
+            role="tab"
+            id="registerTab"
+            aria-selected="false"
+            aria-controls="registerPanel"
+            tabindex="-1"
+          >
+            Register
+          </button>
+        </div>
+        <section id="loginPanel" role="tabpanel" aria-labelledby="loginTab">
+          <form id="loginForm">
+            <label
+              >Identifier<input
+                name="identifier"
+                autocomplete="username"
+                required /></label
+            ><label
+              >Password<input
+                name="password"
+                type="password"
+                autocomplete="current-password"
+                required
+            /></label>
+            <p class="help">
+              Demo only: identifier <strong>admin</strong>, password
+              <strong>admin</strong>.
+            </p>
+            <button class="button" type="submit">Sign in</button>
+          </form>
+        </section>
+        <section
+          id="registerPanel"
+          role="tabpanel"
+          aria-labelledby="registerTab"
+          hidden
+        >
+          <form id="registerForm">
+            <label>Name<input name="name" autocomplete="name" required /></label
+            ><label
+              >Email<input
+                name="email"
+                type="email"
+                autocomplete="email"
+                required /></label
+            ><label
+              >Password<input
+                name="password"
+                type="password"
+                autocomplete="new-password"
+                minlength="6"
+                required /></label
+            ><button class="button" type="submit">Create account</button>
+          </form>
+        </section>
+      </div>
+    </dialog>
+    <dialog id="purchaseDialog" aria-labelledby="purchaseTitle">
+      <div class="dialog-content">
+        <div class="dialog-head">
+          <h2 id="purchaseTitle">Confirm purchase</h2>
+          <button
+            class="close"
+            type="button"
+            data-close="purchaseDialog"
+            aria-label="Close purchase dialog"
+          >
+            Close
+          </button>
+        </div>
+        <p id="purchaseDetails"></p>
+        <form method="dialog" id="purchaseForm">
+          <div class="button-row">
+            <button class="button" value="confirm" type="submit">
+              Confirm purchase</button
+            ><button class="button secondary" value="cancel" type="submit">
+              Cancel
+            </button>
+          </div>
+        </form>
+      </div>
+    </dialog>
+    <script>
+      "use strict";
+
+      const DEFAULT_API = "http://127.0.0.1:3000/v1";
+
+      const $ = (selector) => document.querySelector(selector);
+
+      const state = {
+        api: localStorage.getItem("crudo.api") || DEFAULT_API,
+        token: localStorage.getItem("crudo.token") || "",
+        identifier: localStorage.getItem("crudo.identifier") || "",
+        me: null,
+        products: [],
+        purchase: null,
+        returnFocus: null,
+      };
+
+      const text = (value) => String(value ?? "");
+
+      const cents = (value) =>
+        new Intl.NumberFormat(undefined, {
+          style: "currency",
+          currency: "USD",
+        }).format((Number(value) || 0) / 100);
+
+      const clear = (node) => node.replaceChildren();
+
+      const el = (tag, props = {}, children = []) => {
+        const node = document.createElement(tag);
+        Object.entries(props).forEach(([key, value]) => {
+          if (key === "class") node.className = value;
+          else if (key === "text") node.textContent = text(value);
+          else if (key.startsWith("on"))
+            node.addEventListener(key.slice(2), value);
+          else node.setAttribute(key, text(value));
+        });
+        node.append(...children);
+        return node;
+      };
+
+      function message(value, error = false) {
+        $(error ? "#error" : "#status").textContent = text(value);
+        if (error) $("#status").textContent = "";
+      }
+      function uuid() {
+        if (crypto.randomUUID) return crypto.randomUUID();
+        const b = new Uint8Array(16);
+        crypto.getRandomValues(b);
+        b[6] = (b[6] & 15) | 64;
+        b[8] = (b[8] & 63) | 128;
+        return [...b]
+          .map(
+            (n, i) =>
+              (i === 4 || i === 6 || i === 8 || i === 10 ? "-" : "") +
+              n.toString(16).padStart(2, "0"),
+          )
+          .join("");
+      }
+      function base() {
+        return state.api.replace(/\/+$/, "");
+      }
+      function setBusy(button, busy, label) {
+        if (busy) {
+          button.dataset.label = button.textContent;
+          button.textContent = label;
+          button.disabled = true;
+        } else {
+          button.textContent = button.dataset.label || button.textContent;
+          button.disabled = false;
+        }
+      }
+      function basic(identifier, password) {
+        const bytes = new TextEncoder().encode(`${identifier}:${password}`);
+        return "Basic " + btoa(String.fromCharCode(...bytes));
+      }
+      function logout(note = true) {
+        state.token = "";
+        state.identifier = "";
+        state.me = null;
+        localStorage.removeItem("crudo.token");
+        localStorage.removeItem("crudo.identifier");
+        renderHeader();
+        renderDashboard();
+        if (note) message("Signed out.");
+      }
+      async function api(path, options = {}) {
+        const headers = new Headers(options.headers || {});
+        if (options.body) headers.set("Content-Type", "application/json");
+        if (state.token && options.auth !== false)
+          headers.set("Authorization", `Bearer ${state.token}`);
+        let response;
+        try {
+          response = await fetch(base() + path, {
+            ...options,
+            headers,
+          });
+        } catch {
+          throw new Error(
+            "Could not reach the API. Check that the server is running and the API URL is correct.",
+          );
+        }
+        const raw = await response.text();
+        let data = null;
+        try {
+          data = raw ? JSON.parse(raw) : null;
+        } catch {
+          data = raw;
+        }
+        if (response.status === 401 && options.auth !== false) {
+          logout(false);
+          throw new Error("Your session has expired. Please sign in again.");
+        }
+        if (!response.ok)
+          throw new Error(
+            text(data && (data.error || data.message)) ||
+              `Request failed (${response.status}).`,
+          );
+        return data;
+      }
+      function setConnection(online) {
+        $("#connectionDot").className =
+          `indicator ${online ? "online" : "offline"}`;
+        $("#connectionText").textContent = online
+          ? "API connected"
+          : "API unavailable";
+      }
+      function renderHeader() {
+        const signedIn = Boolean(state.me);
+        const b = $("#accountButton");
+        b.textContent = signedIn
+          ? `Account: ${text(state.me.name) || "Dashboard"}`
+          : "Sign in";
+        $("#signOutButton").hidden = !signedIn;
+      }
+      function productCard(product) {
+        const active =
+          product.active === true ||
+          product.active === 1 ||
+          product.active === "1";
+        const buy = el("button", {
+          class: "button",
+          type: "button",
+          text: "Purchase",
+          onClick: () => startPurchase(product),
+        });
+        buy.disabled = !active;
+        const card = el(
+          "article",
+          {
+            class: "card product",
+          },
+          [
+            el("span", {
+              class: "category",
+              text: product.category || "Digital good",
+            }),
+            el("h3", {
+              text: product.name || "Untitled product",
+            }),
+            el("p", {
+              text: product.description || "No description provided.",
+            }),
+            el("div", {
+              class: "price",
+              text: cents(product.price),
+            }),
+            buy,
+          ],
+        );
+        if (!active)
+          card.append(
+            el("p", {
+              class: "help",
+              text: "Currently unavailable.",
+            }),
+          );
+        return card;
+      }
+      function renderProducts() {
+        const root = $("#products");
+        clear(root);
+        if (!state.products.length)
+          root.append(
+            el("p", {
+              class: "empty",
+              text: "No products are available right now.",
+            }),
+          );
+        else
+          state.products.forEach((product) =>
+            root.append(productCard(product)),
+          );
+      }
+      async function loadProducts(announce = false) {
+        message("");
+        try {
+          const products = await api("/products", {
+            auth: false,
+          });
+          state.products = Array.isArray(products) ? products : [];
+          setConnection(true);
+          renderProducts();
+          if (announce) message("Products refreshed.");
+        } catch (error) {
+          setConnection(false);
+          state.products = [];
+          renderProducts();
+          message(error.message, true);
+        }
+      }
+      function switchView(name) {
+        const dashboard = name === "dashboard";
+        $("#storeView").hidden = dashboard;
+        $("#dashboardView").hidden = !dashboard;
+        document
+          .querySelectorAll("[data-nav]")
+          .forEach((a) =>
+            a.setAttribute(
+              "aria-current",
+              a.dataset.nav === name ? "page" : "false",
+            ),
+          );
+        if (dashboard) renderDashboard();
+      }
+      function addCell(row, value, scope) {
+        row.append(
+          el(
+            scope ? "th" : "td",
+            scope
+              ? {
+                  scope,
+                  text: value,
+                }
+              : {
+                  text: value,
+                },
+          ),
+        );
+      }
+      function table(headers, rows, caption) {
+        const t = el("table");
+        t.append(
+          el("caption", {
+            text: caption,
+          }),
+        );
+        const head = el("thead"),
+          hr = el("tr");
+        headers.forEach((h) =>
+          hr.append(
+            el("th", {
+              scope: "col",
+              text: h,
+            }),
+          ),
+        );
+        head.append(hr);
+        t.append(head);
+        const body = el("tbody");
+        rows.forEach((cells) => {
+          const r = el("tr");
+          cells.forEach((cell, index) => {
+            if (cell instanceof Node)
+              r.append(
+                index === 0
+                  ? el(
+                      "th",
+                      {
+                        scope: "row",
+                      },
+                      [cell],
+                    )
+                  : el("td", {}, [cell]),
+              );
+            else addCell(r, cell, index === 0);
+          });
+          body.append(r);
+        });
+        t.append(body);
+        return el(
+          "div",
+          {
+            class: "table-wrap",
+          },
+          [t],
+        );
+      }
+      function formatDate(value) {
+        if (value === null || value === undefined || value === "") return "—";
+        const numeric = Number(value);
+        const date =
+          Number.isFinite(numeric) && String(value).trim() !== ""
+            ? new Date(numeric * 1000)
+            : new Date(value);
+        return Number.isNaN(date.getTime())
+          ? text(value)
+          : new Intl.DateTimeFormat(undefined, {
+              dateStyle: "medium",
+              timeStyle: "short",
+            }).format(date);
+      }
+      function transactionRows(items, includeUser = false, fallbackUser = "—") {
+        return items.map((item) => {
+          const user = item.user || {};
+          const identity =
+            item.user_name ||
+            user.name ||
+            item.user_email ||
+            user.email ||
+            item.email ||
+            item.user_id ||
+            user.id ||
+            fallbackUser;
+          const cells = [
+            item.type || item.kind || "Transaction",
+            item.status || "—",
+            cents(item.amount),
+            formatDate(item.created_at || item.createdAt || item.timestamp),
+            item.fulfillment || "—",
+            item.license_key || "—",
+          ];
+          if (includeUser) cells.splice(1, 0, identity);
+          return cells;
+        });
+      }
+      function dashboardShell(children) {
+        const root = $("#dashboardContent");
+        clear(root);
+        root.append(...children);
+      }
+      function renderDashboard() {
+        $("#dashboardLead").textContent = state.me
+          ? `${state.me.name} · ${state.me.role || "customer"}`
+          : "Sign in to view your balance, purchases, and account history.";
+        if (!state.me) {
+          dashboardShell([
+            el(
+              "div",
+              {
+                class: "panel",
+              },
+              [
+                el("h2", {
+                  text: "Sign in required",
+                }),
+                el("p", {
+                  class: "muted",
+                  text: "Your dashboard is available after you sign in.",
+                }),
+                el("button", {
+                  class: "button",
+                  type: "button",
+                  text: "Sign in",
+                  onClick: openAuth,
+                }),
+              ],
+            ),
+          ]);
+          return;
+        }
+        dashboardShell(
+          state.me.role === "admin" ? adminDashboard() : customerDashboard(),
+        );
+      }
+      function customerDashboard() {
+        const balance = el(
+          "section",
+          {
+            class: "dashboard-grid",
+          },
+          [
+            el(
+              "article",
+              {
+                class: "stat",
+              },
+              [
+                el("span", {
+                  text: "Available balance",
+                }),
+                el("strong", {
+                  text: cents(state.me.balance),
+                }),
+              ],
+            ),
+            el(
+              "article",
+              {
+                class: "stat",
+              },
+              [
+                el("span", {
+                  text: "Account",
+                }),
+                el("strong", {
+                  text: state.me.name,
+                }),
+              ],
+            ),
+            el(
+              "article",
+              {
+                class: "stat",
+              },
+              [
+                el("span", {
+                  text: "Role",
+                }),
+                el("strong", {
+                  text: state.me.role || "customer",
+                }),
+              ],
+            ),
+          ],
+        );
+        const topup = el(
+          "section",
+          {
+            class: "panel",
+          },
+          [
+            el("h2", {
+              text: "Demo balance credit",
+            }),
+            el("p", {
+              class: "notice",
+              text: "This adds demo credit to your balance. It is not a real payment.",
+            }),
+            topUpForm(),
+          ],
+        );
+        const transactions = el(
+          "section",
+          {
+            class: "panel",
+            id: "customerTransactions",
+          },
+          [
+            el("h2", {
+              text: "Your transactions",
+            }),
+            el("p", {
+              class: "empty",
+              text: "Loading transactions…",
+            }),
+          ],
+        );
+        loadCustomerTransactions(transactions);
+        return [balance, topup, transactions];
+      }
+      function topUpForm() {
+        const form = el("form");
+        const amount = el("input", {
+          name: "amount",
+          type: "number",
+          min: "1",
+          step: "1",
+          required: "",
+          inputmode: "numeric",
+        });
+        form.append(
+          el(
+            "label",
+            {
+              text: "Amount in cents",
+            },
+            [amount],
+          ),
+          el("button", {
+            class: "button",
+            type: "submit",
+            text: "Add demo credit",
+          }),
+        );
+        form.addEventListener("submit", async (event) => {
+          event.preventDefault();
+          const button = form.querySelector("button");
+          const value = Number(amount.value);
+          if (!Number.isInteger(value) || value < 1) {
+            message("Enter a whole number of cents greater than zero.", true);
+            return;
+          }
+          setBusy(button, true, "Adding credit…");
+          try {
+            await api("/top-ups", {
+              method: "POST",
+              body: JSON.stringify({
+                external_id: uuid(),
+                amount: value,
+              }),
+            });
+            await loadMe();
+            await loadCustomerTransactions($("#customerTransactions"));
+            message("Demo credit added.");
+          } catch (error) {
+            message(error.message, true);
+          } finally {
+            setBusy(button, false);
+          }
+        });
+        return form;
+      }
+      async function loadCustomerTransactions(root) {
+        if (!root || !state.me || state.me.role === "admin") return;
+        try {
+          const items = await api("/transactions");
+          clear(root);
+          root.append(
+            el("h2", {
+              text: "Your transactions",
+            }),
+          );
+          root.append(
+            items?.length
+              ? table(
+                  [
+                    "Type",
+                    "Status",
+                    "Amount",
+                    "Date",
+                    "Fulfillment",
+                    "License key",
+                  ],
+                  transactionRows(items),
+                  "Your purchases and balance activity",
+                )
+              : el("p", {
+                  class: "empty",
+                  text: "No transactions yet.",
+                }),
+          );
+        } catch (error) {
+          message(error.message, true);
+        }
+      }
+      function adminDashboard() {
+        const stats = el(
+          "section",
+          {
+            class: "dashboard-grid",
+            id: "adminStats",
+          },
+          [
+            el(
+              "article",
+              {
+                class: "stat",
+              },
+              [
+                el("span", {
+                  text: "Loading summary…",
+                }),
+              ],
+            ),
+          ],
+        );
+        const users = el(
+          "section",
+          {
+            class: "panel",
+            id: "adminUsers",
+          },
+          [
+            el("h2", {
+              text: "Users",
+            }),
+            el("p", {
+              class: "empty",
+              text: "Loading users…",
+            }),
+          ],
+        );
+        const tx = el(
+          "section",
+          {
+            class: "panel",
+            id: "adminTransactions",
+          },
+          [
+            el("h2", {
+              text: "All transactions",
+            }),
+            el("p", {
+              class: "empty",
+              text: "Loading transactions…",
+            }),
+          ],
+        );
+        const products = el(
+          "section",
+          {
+            class: "panel",
+            id: "adminProducts",
+          },
+          [
+            el("h2", {
+              text: "Product management",
+            }),
+            productForm(),
+            el("div", {
+              id: "adminProductList",
+            }),
+          ],
+        );
+        loadAdmin(stats, users, tx, products);
+        return [stats, users, tx, products];
+      }
+      function summaryLabel(key) {
+        return text(key)
+          .replace(/([a-z])([A-Z])/g, "$1 $2")
+          .replace(/[_-]+/g, " ")
+          .replace(/\b\w/g, (letter) => letter.toUpperCase());
+      }
+      function isMoneySummary(key) {
+        return /balance|revenue|sales|spend|amount|credit|debit|value|earnings|income|cost/i.test(
+          key,
+        );
+      }
+      async function loadAdmin(stats, users, tx, products) {
+        try {
+          const [summary, userList, transactions, productList] =
+            await Promise.all([
+              api("/admin/summary"),
+              api("/admin/users"),
+              api("/admin/transactions"),
+              api("/admin/products"),
+            ]);
+          clear(stats);
+          const entries = Object.entries(summary || {});
+          if (entries.length)
+            entries.forEach(([key, value]) =>
+              stats.append(
+                el(
+                  "article",
+                  {
+                    class: "stat",
+                  },
+                  [
+                    el("span", {
+                      text: summaryLabel(key),
+                    }),
+                    el("strong", {
+                      text:
+                        isMoneySummary(key) && Number.isFinite(Number(value))
+                          ? cents(value)
+                          : value,
+                    }),
+                  ],
+                ),
+              ),
+            );
+          else
+            stats.append(
+              el(
+                "article",
+                {
+                  class: "stat",
+                },
+                [
+                  el("span", {
+                    text: "Summary unavailable",
+                  }),
+                ],
+              ),
+            );
+          clear(users);
+          users.append(
+            el("h2", {
+              text: "Users",
+            }),
+          );
+          users.append(
+            userList?.length
+              ? table(
+                  ["Name", "Email", "Role", "Balance", "History"],
+                  userList.map((u) => [
+                    u.name || u.id,
+                    u.email || "—",
+                    u.role || "—",
+                    cents(u.balance),
+                    el("button", {
+                      class: "button secondary small",
+                      type: "button",
+                      text: "View history",
+                      onClick: () => loadUserHistory(u.id),
+                    }),
+                  ]),
+                  "Registered users",
+                )
+              : el("p", {
+                  class: "empty",
+                  text: "No users found.",
+                }),
+          );
+          clear(tx);
+          tx.append(
+            el("h2", {
+              text: "All transactions",
+            }),
+          );
+          tx.append(
+            transactions?.length
+              ? table(
+                  [
+                    "Type",
+                    "User",
+                    "Status",
+                    "Amount",
+                    "Date",
+                    "Fulfillment",
+                    "License key",
+                  ],
+                  transactionRows(transactions, true),
+                  "All customer transactions",
+                )
+              : el("p", {
+                  class: "empty",
+                  text: "No transactions found.",
+                }),
+          );
+          state.adminProducts = Array.isArray(productList) ? productList : [];
+          renderAdminProducts();
+        } catch (error) {
+          message(error.message, true);
+        }
+      }
+      function productForm(product = null) {
+        const form = el("form", {
+          class: "two-up",
+        });
+        const fields = [
+          ["slug", "Slug"],
+          ["name", "Name"],
+          ["price", "Price in cents"],
+          ["description", "Description"],
+          ["fulfillment", "Fulfillment"],
+        ];
+        fields.forEach(([name, label]) => {
+          const props = {
+            name,
+            required: "",
+          };
+          const input =
+            name === "description" || name === "fulfillment"
+              ? el("textarea", props)
+              : el("input", {
+                  ...props,
+                  type: name === "price" ? "number" : "text",
+                });
+          if (name === "slug") {
+            input.pattern = "[a-z0-9]+(?:-[a-z0-9]+)*";
+            input.title = "Use lowercase letters, numbers, and single hyphens.";
+          }
+          if (name === "price") {
+            input.min = "1";
+            input.step = "1";
+            input.inputMode = "numeric";
+          }
+          input.value = product?.[name] ?? "";
+          form.append(
+            el(
+              "label",
+              {
+                text: label,
+              },
+              [input],
+            ),
+          );
+        });
+        const category = el(
+          "select",
+          {
+            name: "category",
+            required: "",
+          },
+          ["license", "service", "book", "asset"].map((value) =>
+            el("option", {
+              value,
+              text: value[0].toUpperCase() + value.slice(1),
+            }),
+          ),
+        );
+        category.value = product?.category ?? "license";
+        form.insertBefore(
+          el(
+            "label",
+            {
+              text: "Category",
+            },
+            [category],
+          ),
+          form.children[2],
+        );
+        const action = el("button", {
+          class: "button",
+          type: "submit",
+          text: product ? "Save product" : "Create product",
+        });
+        form.append(action);
+        form.addEventListener("submit", async (event) => {
+          event.preventDefault();
+          if (!form.reportValidity()) return;
+          const values = Object.fromEntries(new FormData(form));
+          Object.keys(values).forEach(
+            (key) => (values[key] = text(values[key]).trim()),
+          );
+          values.price = Number(values.price);
+          if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(values.slug)) {
+            message(
+              "Slug must use lowercase letters, numbers, and single hyphens.",
+              true,
+            );
+            return;
+          }
+          if (
+            !["license", "service", "book", "asset"].includes(values.category)
+          ) {
+            message("Choose a valid product category.", true);
+            return;
+          }
+          if (!Number.isSafeInteger(values.price) || values.price < 1) {
+            message(
+              "Price must be a whole number of cents of at least 1.",
+              true,
+            );
+            return;
+          }
+          if (
+            ["name", "description", "fulfillment"].some((key) => !values[key])
+          ) {
+            message("Complete every product field.", true);
+            return;
+          }
+          setBusy(action, true, product ? "Saving…" : "Creating…");
+          try {
+            await api(
+              product
+                ? `/admin/products/${encodeURIComponent(product.id)}`
+                : "/admin/products",
+              {
+                method: product ? "PUT" : "POST",
+                body: JSON.stringify(values),
+              },
+            );
+            message(product ? "Product updated." : "Product created.");
+            await refreshAdminProducts();
+          } catch (error) {
+            message(error.message, true);
+          } finally {
+            setBusy(action, false);
+          }
+        });
+        return form;
+      }
+      function renderAdminProducts() {
+        const root = $("#adminProductList");
+        if (!root) return;
+        clear(root);
+        root.append(
+          el("h3", {
+            text: "Existing products",
+          }),
+        );
+        if (!state.adminProducts.length) {
+          root.append(
+            el("p", {
+              class: "empty",
+              text: "No products found.",
+            }),
+          );
+          return;
+        }
+        state.adminProducts.forEach((product) => {
+          const active =
+            product.active === true ||
+            product.active === 1 ||
+            product.active === "1";
+          const article = el(
+            "article",
+            {
+              class: "panel",
+            },
+            [
+              el(
+                "div",
+                {
+                  class: "inline",
+                },
+                [
+                  el("strong", {
+                    text: product.name,
+                  }),
+                  el("span", {
+                    class: "state",
+                    text: active ? "Active" : "Inactive",
+                  }),
+                  el("button", {
+                    class: "button secondary small",
+                    type: "button",
+                    text: active ? "Deactivate" : "Activate",
+                    onClick: (event) =>
+                      setProductStatus(product, !active, event.currentTarget),
+                  }),
+                ],
+              ),
+              productForm(product),
+            ],
+          );
+          root.append(article);
+        });
+      }
+      async function setProductStatus(product, active, button) {
+        setBusy(button, true, active ? "Activating…" : "Deactivating…");
+        try {
+          await api(
+            `/admin/products/${encodeURIComponent(product.id)}/status`,
+            {
+              method: "PUT",
+              body: JSON.stringify({
+                active,
+              }),
+            },
+          );
+          message(`Product ${active ? "activated" : "deactivated"}.`);
+          await refreshAdminProducts();
+        } catch (error) {
+          message(error.message, true);
+        } finally {
+          setBusy(button, false);
+        }
+      }
+      async function refreshAdminProducts() {
+        const list = await api("/admin/products");
+        state.adminProducts = Array.isArray(list) ? list : [];
+        renderAdminProducts();
+        await loadProducts();
+      }
+      async function loadUserHistory(id) {
+        try {
+          const items = await api(
+            `/admin/users/${encodeURIComponent(id)}/transactions`,
+          );
+          const panel = el(
+            "section",
+            {
+              class: "panel",
+              id: "userHistory",
+            },
+            [
+              el("h2", {
+                text: `User ${id} history`,
+              }),
+              items?.length
+                ? table(
+                    [
+                      "Type",
+                      "User",
+                      "Status",
+                      "Amount",
+                      "Date",
+                      "Fulfillment",
+                      "License key",
+                    ],
+                    transactionRows(items, true, id),
+                    "Selected user transaction history",
+                  )
+                : el("p", {
+                    class: "empty",
+                    text: "No transactions for this user.",
+                  }),
+            ],
+          );
+          const existing = $("#userHistory");
+          if (existing) existing.replaceWith(panel);
+          else $("#adminTransactions").after(panel);
+          panel.scrollIntoView({
+            block: "nearest",
+          });
+        } catch (error) {
+          message(error.message, true);
+        }
+      }
+      function openAuth() {
+        state.returnFocus = document.activeElement;
+        $("#authDialog").showModal();
+        $("#loginForm input").focus();
+      }
+      function closeDialog(dialog) {
+        dialog.close();
+        state.returnFocus?.focus?.();
+      }
+      function startPurchase(product) {
+        if (!state.me) {
+          message("Sign in before making a purchase.");
+          openAuth();
+          return;
+        }
+        state.purchase = product;
+        $("#purchaseDetails").textContent =
+          `Buy ${text(product.name)} for ${cents(product.price)}? Your account balance will be charged.`;
+        state.returnFocus = document.activeElement;
+        $("#purchaseDialog").showModal();
+        $("#purchaseForm button[value=confirm]").focus();
+      }
+      async function loadMe() {
+        state.me = await api("/me");
+        renderHeader();
+        renderDashboard();
+      }
+      async function refreshDashboard() {
+        if (!state.token) {
+          renderDashboard();
+          return;
+        }
+        try {
+          await loadMe();
+          if (state.me.role === "admin") {
+            const stats = $("#adminStats"),
+              users = $("#adminUsers"),
+              tx = $("#adminTransactions"),
+              products = $("#adminProducts");
+            if (stats && users && tx && products)
+              await loadAdmin(stats, users, tx, products);
+          } else await loadCustomerTransactions($("#customerTransactions"));
+          setConnection(true);
+          message("Dashboard refreshed.");
+        } catch (error) {
+          setConnection(false);
+          message(error.message, true);
+        }
+      }
+      $("#accountButton").addEventListener("click", () =>
+        state.me ? (location.hash = "#dashboard") : openAuth(),
+      );
+      $("#signOutButton").addEventListener("click", () => logout());
+      $("#refreshProducts").addEventListener("click", () => loadProducts(true));
+      $("#refreshDashboard").addEventListener("click", refreshDashboard);
+      $("#apiForm").addEventListener("submit", async (event) => {
+        event.preventDefault();
+        const input = $("#apiUrl"),
+          value = input.value.trim().replace(/\/+$/, "");
+        if (!value) {
+          message("Enter an API base URL.", true);
+          input.value = state.api;
+          return;
+        }
+        try {
+          new URL(value);
+        } catch {
+          message("Enter a valid API base URL.", true);
+          input.value = state.api;
+          return;
+        }
+        state.api = value;
+        localStorage.setItem("crudo.api", value);
+        await loadProducts(true);
+        if (state.token) await refreshDashboard();
+      });
+
+      document
+        .querySelectorAll("[data-close]")
+        .forEach((button) =>
+          button.addEventListener("click", () =>
+            closeDialog($("#" + button.dataset.close)),
+          ),
+        );
+      [$("#authDialog"), $("#purchaseDialog")].forEach((dialog) =>
+        dialog.addEventListener("close", () => state.returnFocus?.focus?.()),
+      );
+
+      $("#loginTab").addEventListener("click", () => setAuthTab("login"));
+      $("#registerTab").addEventListener("click", () => setAuthTab("register"));
+      document.querySelectorAll(".tab").forEach((tab, index, tabs) =>
+        tab.addEventListener("keydown", (event) => {
+          let next = null;
+          if (event.key === "ArrowLeft")
+            next = (index + tabs.length - 1) % tabs.length;
+          if (event.key === "ArrowRight") next = (index + 1) % tabs.length;
+          if (event.key === "Home") next = 0;
+          if (event.key === "End") next = tabs.length - 1;
+          if (next === null) return;
+          event.preventDefault();
+          tabs[next].focus();
+          setAuthTab(next === 0 ? "login" : "register", false);
+        }),
+      );
+      function setAuthTab(tab, focus = true) {
+        const login = tab === "login";
+        $("#loginTab").setAttribute("aria-selected", login);
+        $("#registerTab").setAttribute("aria-selected", !login);
+        $("#loginTab").tabIndex = login ? 0 : -1;
+        $("#registerTab").tabIndex = login ? -1 : 0;
+        $("#loginPanel").hidden = !login;
+        $("#registerPanel").hidden = login;
+        if (focus)
+          (login ? $("#loginForm input") : $("#registerForm input")).focus();
+      }
+      $("#loginForm").addEventListener("submit", async (event) => {
+        event.preventDefault();
+        const form = event.currentTarget,
+          button = form.querySelector("button"),
+          data = new FormData(form);
+        setBusy(button, true, "Signing in…");
+        try {
+          const identifier = text(data.get("identifier"));
+          const result = await api("/tokens", {
+            method: "POST",
+            auth: false,
+            headers: {
+              Authorization: basic(identifier, text(data.get("password"))),
+            },
+          });
+          if (!result?.token)
+            throw new Error("The API did not return a session token.");
+          state.token = result.token;
+          state.identifier = identifier;
+          localStorage.setItem("crudo.token", state.token);
+          localStorage.setItem("crudo.identifier", identifier);
+          await loadMe();
+          $("#authDialog").close();
+          message("Signed in.");
+        } catch (error) {
+          message(error.message, true);
+        } finally {
+          setBusy(button, false);
+        }
+      });
+
+      $("#registerForm").addEventListener("submit", async (event) => {
+        event.preventDefault();
+        const form = event.currentTarget,
+          button = form.querySelector("button"),
+          data = new FormData(form);
+        setBusy(button, true, "Creating account…");
+        try {
+          await api("/users", {
+            method: "POST",
+            auth: false,
+            body: JSON.stringify({
+              name: data.get("name"),
+              email: data.get("email"),
+              password: data.get("password"),
+            }),
+          });
+          setAuthTab("login");
+          $("#loginForm [name=identifier]").value = text(data.get("email"));
+          message("Account created. Sign in to continue.");
+        } catch (error) {
+          message(error.message, true);
+        } finally {
+          setBusy(button, false);
+        }
+      });
+
+      $("#purchaseForm").addEventListener("submit", async (event) => {
+        if (event.submitter?.value !== "confirm") return;
+        event.preventDefault();
+        const button = event.submitter,
+          product = state.purchase;
+        if (!product) return;
+        setBusy(button, true, "Purchasing…");
+        try {
+          const result = await api("/purchases", {
+            method: "POST",
+            body: JSON.stringify({
+              external_id: uuid(),
+              product_id: product.id,
+            }),
+          });
+          $("#purchaseDialog").close();
+          await loadMe();
+          if (state.me?.role === "admin") await refreshDashboard();
+          else await loadCustomerTransactions($("#customerTransactions"));
+          const delivery = result?.fulfillment || result?.license_key;
+          message(
+            delivery
+              ? `Purchase complete. Fulfillment: ${text(delivery)}`
+              : "Purchase complete. See your transactions for fulfillment.",
+          );
+        } catch (error) {
+          message(error.message, true);
+        } finally {
+          setBusy(button, false);
+        }
+      });
+
+      window.addEventListener("hashchange", () =>
+        switchView(location.hash === "#dashboard" ? "dashboard" : "store"),
+      );
+      $("#storeView").addEventListener("click", () => {});
+
+      (async () => {
+        $("#apiUrl").value = state.api;
+        renderHeader();
+        switchView(location.hash === "#dashboard" ? "dashboard" : "store");
+        await loadProducts();
+        if (state.token) {
+          try {
+            await loadMe();
+          } catch (error) {
+            message(error.message, true);
+          }
+        }
+      })();
+    </script>
+  </body>
+</html>
