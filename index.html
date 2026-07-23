@@ -3,493 +3,291 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="color-scheme" content="light" />
+    <meta name="application-version" content="0.4.0" />
+    <meta name="color-scheme" content="dark" />
+    <meta name="theme-color" content="#10110f" />
     <title>Crudo Store</title>
     <style>
       :root {
-        --bg: #f7f7f5;
-        --surface: #fff;
-        --ink: #18201c;
-        --muted: #59635d;
-        --line: #c9d0ca;
-        --accent: #235d3b;
-        --accent-ink: #fff;
-        --warning: #8a4b00;
-        --danger: #a42222;
-        --focus: #075fcc;
-        --radius: 10px;
-        --shadow: 0 2px 10px #18201c12;
+        color-scheme: dark;
+        --bg: #10110f;
+        --surface: #171916;
+        --surface-raised: #1d201c;
+        --border: #343a32;
+        --text: #f0f2ed;
+        --muted: #aab1a6;
+        --accent: #b9e96e;
+        --accent-ink: #15200d;
+        --danger: #ff8f8a;
+        --warning: #f2c879;
+        --focus: #d4ff90;
+        --shadow: 0 12px 28px rgb(0 0 0 / 22%);
+        --radius: 8px;
       }
-      * {
-        box-sizing: border-box;
-      }
-      html {
-        scroll-behavior: smooth;
-      }
+
+      * { box-sizing: border-box; }
+
+      html { scroll-behavior: smooth; }
+
       body {
         margin: 0;
         background: var(--bg);
-        color: var(--ink);
-        font:
-          16px/1.5 system-ui,
-          -apple-system,
-          "Segoe UI",
-          sans-serif;
+        color: var(--text);
+        font: 16px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif;
+        font-variant-numeric: tabular-nums;
       }
+
       button,
       input,
       textarea,
-      select {
-        font: inherit;
-      }
-      button,
-      input,
-      textarea,
-      select {
-        min-height: 44px;
-      }
-      button {
-        cursor: pointer;
-      }
-      button:disabled {
-        cursor: wait;
-        opacity: 0.65;
-      }
+      select { min-height: 44px; font: inherit; color-scheme: dark; }
+
+      button { cursor: pointer; }
+      button:disabled { cursor: wait; opacity: .55; }
+      a { color: var(--accent); }
+      p { max-width: 72ch; }
+      h1, h2, h3, p { margin-top: 0; }
+      h1, h2, h3 { letter-spacing: -.035em; line-height: 1.12; }
+      h1 { margin-bottom: 16px; font-size: clamp(2.3rem, 6vw, 4.25rem); }
+      h2 { margin-bottom: 12px; font-size: 1.5rem; }
+      h3 { font-size: 1.05rem; }
+
       button:focus-visible,
       a:focus-visible,
       input:focus-visible,
       textarea:focus-visible,
-      select:focus-visible {
-        outline: 3px solid var(--focus);
-        outline-offset: 2px;
-      }
-      a {
-        color: var(--accent);
-      }
+      select:focus-visible,
+      summary:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
+
+      [hidden], .view[hidden] { display: none !important; }
+
       .skip {
         position: absolute;
-        left: 1rem;
+        z-index: 20;
         top: -5rem;
-        z-index: 10;
-        padding: 0.7rem 1rem;
-        background: var(--ink);
-        color: #fff;
-      }
-      .skip:focus {
-        top: 1rem;
-      }
-      .wrap {
-        width: min(1120px, calc(100% - 2rem));
-        margin: auto;
-      }
-      .site-header {
-        border-bottom: 1px solid var(--line);
-        background: var(--surface);
-      }
-      .header-row {
-        min-height: 72px;
-        display: flex;
-        align-items: center;
-        gap: 1rem;
-        flex-wrap: wrap;
-      }
-      .brand {
-        color: var(--ink);
-        text-decoration: none;
-        font-weight: 800;
-        letter-spacing: -0.03em;
-        font-size: 1.2rem;
-      }
-      nav {
-        display: flex;
-        gap: 0.25rem;
-      }
-      nav a {
-        padding: 0.6rem 0.75rem;
-        color: var(--muted);
-        text-decoration: none;
-        font-weight: 650;
-      }
-      nav a[aria-current="page"] {
-        color: var(--ink);
-        text-decoration: underline;
-        text-underline-offset: 4px;
-      }
-      .header-actions {
-        margin-left: auto;
-        display: flex;
-        align-items: center;
-        gap: 0.75rem;
-        flex-wrap: wrap;
-      }
-      .connection {
-        display: flex;
-        align-items: center;
-        gap: 0.4rem;
-        color: var(--muted);
-        font-size: 0.875rem;
-      }
-      .indicator {
-        width: 0.7rem;
-        height: 0.7rem;
-        border: 2px solid currentColor;
-        border-radius: 50%;
-      }
-      .indicator.online {
-        color: var(--accent);
-        background: var(--accent);
-      }
-      .indicator.offline {
-        color: var(--danger);
-        background: var(--danger);
-      }
-      main {
-        padding: 2.5rem 0 4rem;
-      }
-      .view[hidden],
-      [hidden] {
-        display: none !important;
-      }
-      .intro {
-        max-width: 680px;
-        margin-bottom: 2rem;
-      }
-      h1,
-      h2,
-      h3,
-      p {
-        margin-top: 0;
-      }
-      h1 {
-        font-size: clamp(2rem, 5vw, 3.25rem);
-        letter-spacing: -0.05em;
-        line-height: 1.08;
-        margin-bottom: 0.75rem;
-      }
-      h2 {
-        font-size: 1.45rem;
-        letter-spacing: -0.025em;
-      }
-      h3 {
-        font-size: 1.05rem;
-      }
-      .lede,
-      .muted {
-        color: var(--muted);
-      }
-      .section-head {
-        display: flex;
-        justify-content: space-between;
-        gap: 1rem;
-        align-items: baseline;
-        margin: 2.5rem 0 1rem;
-        flex-wrap: wrap;
-      }
-      .products {
-        display: grid;
-        grid-template-columns: repeat(4, minmax(0, 1fr));
-        gap: 1rem;
-      }
-      .card,
-      .panel,
-      .stat {
-        border: 1px solid var(--line);
-        border-radius: var(--radius);
-        background: var(--surface);
-        box-shadow: var(--shadow);
-      }
-      .product {
-        display: flex;
-        flex-direction: column;
-        padding: 1.2rem;
-        min-width: 0;
-      }
-      .product h3 {
-        margin: 0.8rem 0 0.4rem;
-      }
-      .product p {
-        color: var(--muted);
-        flex: 1;
-        overflow-wrap: anywhere;
-      }
-      .category,
-      .role,
-      .state {
-        display: inline-block;
-        width: max-content;
-        border: 1px solid #aab6ad;
-        border-radius: 999px;
-        padding: 0.15rem 0.55rem;
-        color: #314339;
-        font-size: 0.78rem;
-        font-weight: 700;
-      }
-      .price {
-        margin: 1.25rem 0 0.8rem;
-        font-size: 1.25rem;
-        font-weight: 800;
-        font-variant-numeric: tabular-nums;
-      }
-      .button {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        gap: 0.5rem;
-        min-height: 44px;
-        border: 1px solid var(--accent);
-        border-radius: 7px;
-        padding: 0.55rem 0.9rem;
+        left: 16px;
+        padding: 10px 16px;
         background: var(--accent);
         color: var(--accent-ink);
+        font-weight: 800;
+      }
+      .skip:focus { top: 16px; }
+
+      .wrap { width: min(1160px, calc(100% - 40px)); margin: auto; }
+
+      .site-header {
+        position: sticky;
+        z-index: 10;
+        top: 0;
+        border-bottom: 1px solid var(--border);
+        background: var(--bg);
+      }
+
+      .header-row {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+        align-items: center;
+        min-height: 68px;
+        gap: 16px;
+      }
+
+      .brand {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        min-height: 44px;
+        min-width: 0;
+        width: max-content;
+        color: var(--text);
+        font-size: 1.1rem;
+        font-weight: 800;
+        letter-spacing: -.04em;
+        text-decoration: none;
+      }
+      .brand::before {
+        width: 18px;
+        height: 18px;
+        border: 3px solid var(--accent);
+        border-radius: 3px;
+        content: "";
+        transform: rotate(45deg);
+      }
+
+      nav {
+        display: flex;
+        padding: 4px;
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        background: var(--surface);
+      }
+      nav a {
+        display: inline-flex;
+        align-items: center;
+        min-height: 44px;
+        padding: 7px 14px;
+        border-radius: 5px;
+        color: var(--muted);
+        font-size: .875rem;
         font-weight: 750;
         text-decoration: none;
       }
-      .button:hover {
-        background: #17472c;
-      }
-      .button.secondary {
-        border-color: #65736a;
-        background: var(--surface);
-        color: var(--ink);
-      }
-      .button.danger {
-        border-color: var(--danger);
-        background: var(--surface);
-        color: var(--danger);
-      }
-      .button.small {
-        min-height: 38px;
-        padding: 0.35rem 0.65rem;
-        font-size: 0.875rem;
-      }
-      .button-row {
+      nav a[aria-current="page"] { background: var(--surface-raised); color: var(--text); }
+
+      .header-actions {
         display: flex;
-        gap: 0.75rem;
-        flex-wrap: wrap;
+        align-items: center;
+        justify-content: end;
+        justify-self: end;
+        min-width: 0;
+        gap: 8px;
       }
-      .notice {
-        margin: 1rem 0;
-        padding: 0.8rem 1rem;
-        border-left: 4px solid var(--warning);
-        background: #fff8eb;
-        color: #573300;
-      }
-      .notice[hidden] {
-        display: none;
-      }
-      .status {
-        min-height: 1.5rem;
-        margin: 1rem 0;
-        color: var(--muted);
-      }
-      .error {
-        min-height: 1.5rem;
-        margin: 1rem 0;
-        color: var(--danger);
-        font-weight: 650;
-      }
-      .dashboard-grid {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 1rem;
-      }
-      .stat {
-        padding: 1.2rem;
-      }
-      .stat strong {
-        display: block;
-        margin-top: 0.4rem;
-        font-size: 1.65rem;
-        font-variant-numeric: tabular-nums;
-      }
-      .panel {
-        padding: 1.2rem;
-        margin-top: 1rem;
-      }
-      .two-up {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 1rem;
-      }
-      form {
-        display: grid;
-        gap: 0.9rem;
-      }
-      label {
-        display: grid;
-        gap: 0.35rem;
-        font-weight: 700;
-      }
-      input,
-      textarea,
-      select {
-        width: 100%;
-        border: 1px solid #7b8980;
-        border-radius: 6px;
-        padding: 0.55rem 0.65rem;
-        background: #fff;
-        color: var(--ink);
-      }
-      textarea {
-        min-height: 100px;
-        resize: vertical;
-      }
-      .help {
-        margin: 0;
-        color: var(--muted);
-        font-size: 0.875rem;
-        font-weight: 400;
-      }
-      .table-wrap {
-        overflow-x: auto;
-      }
-      table {
-        width: 100%;
-        border-collapse: collapse;
-      }
-      caption {
-        padding: 0 0 0.75rem;
-        text-align: left;
-        color: var(--muted);
-      }
-      th,
-      td {
-        padding: 0.75rem;
-        border-bottom: 1px solid var(--line);
-        text-align: left;
-        vertical-align: top;
-      }
-      th {
-        font-size: 0.8rem;
-        text-transform: uppercase;
-        letter-spacing: 0.04em;
-        color: #435047;
-      }
-      td {
-        overflow-wrap: anywhere;
-      }
-      .license {
-        display: block;
-        max-width: 22rem;
-        overflow-wrap: anywhere;
-        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-        font-size: 0.85rem;
-      }
-      .empty {
-        padding: 1.25rem 0;
-        color: var(--muted);
-      }
-      dialog {
-        width: min(500px, calc(100% - 2rem));
-        border: 1px solid var(--line);
-        border-radius: var(--radius);
-        padding: 0;
-        color: var(--ink);
-        box-shadow: 0 12px 42px #0004;
-      }
-      dialog::backdrop {
-        background: #18201c88;
-      }
-      .dialog-content {
-        padding: 1.4rem;
-      }
-      .dialog-head {
+      .connection { display: flex; align-items: center; gap: 6px; color: var(--muted); font-size: .78rem; white-space: nowrap; }
+      .indicator { width: 9px; height: 9px; border: 2px solid currentColor; border-radius: 50%; }
+      .indicator.online { color: var(--accent); background: var(--accent); }
+      .indicator.offline { color: var(--danger); background: var(--danger); }
+
+      .api-settings { position: relative; }
+      .api-settings summary {
         display: flex;
-        justify-content: space-between;
-        align-items: start;
-        gap: 1rem;
-      }
-      .close {
-        min-width: 44px;
-        border: 1px solid var(--line);
-        border-radius: 6px;
-        background: #fff;
-        color: var(--ink);
-        font-weight: 800;
-      }
-      .tabs {
-        display: flex;
-        border-bottom: 1px solid var(--line);
-        margin-bottom: 1rem;
-      }
-      .tab {
+        align-items: center;
         min-height: 44px;
-        border: 0;
-        border-bottom: 3px solid transparent;
-        background: transparent;
+        width: max-content;
+        padding: 0 12px;
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
         color: var(--muted);
-        padding: 0.5rem 0.8rem;
-        font-weight: 750;
+        cursor: pointer;
+        font-size: .875rem;
+        font-weight: 700;
+        list-style: none;
       }
-      .tab[aria-selected="true"] {
-        border-color: var(--accent);
-        color: var(--ink);
-      }
+      .api-settings summary::-webkit-details-marker { display: none; }
+      .api-settings summary::after { margin-left: 8px; color: var(--accent); content: "+"; font-size: 1.1rem; }
+      .api-settings[open] summary { background: var(--surface-raised); color: var(--text); }
+      .api-settings[open] summary::after { content: "–"; }
       .api-control {
-        display: flex;
-        align-items: end;
-        gap: 0.5rem;
-        flex-wrap: wrap;
+        position: absolute;
+        z-index: 11;
+        top: calc(100% + 8px);
+        right: 0;
+        display: grid;
+        width: min(390px, calc(100vw - 40px));
+        gap: 12px;
+        padding: 16px;
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        background: var(--surface-raised);
+        box-shadow: var(--shadow);
       }
-      .api-control label {
-        flex: 1 1 260px;
-        font-size: 0.8rem;
-      }
-      .api-control input {
-        min-width: 220px;
-      }
-      .api-control .help {
-        grid-column: 1 / -1;
-      }
-      .inline {
-        display: flex;
-        gap: 0.75rem;
-        align-items: end;
-        flex-wrap: wrap;
-      }
-      .inline label {
-        flex: 1 1 220px;
-      }
+      .api-control label { font-size: .875rem; }
+      .api-control .help { margin: 0; }
+
+      main { padding: 56px 0 72px; }
+      .intro { max-width: 720px; margin-bottom: 48px; }
+      .eyebrow { margin-bottom: 12px; color: var(--accent); font-size: .78rem; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
+      .lede, .muted { color: var(--muted); font-size: 1.08rem; }
+      .hero-actions { margin-top: 24px; }
+      .section-head { display: flex; align-items: end; justify-content: space-between; gap: 16px; margin: 48px 0 16px; }
+      .section-head h1, .section-head h2 { margin-bottom: 0; }
+
+      .products { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+      .card, .panel, .stat { border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface); }
+      .card { transition: border-color .18s ease, box-shadow .18s ease; }
+      .card:hover { border-color: #596250; box-shadow: var(--shadow); }
+      .panel { padding: 20px; margin-top: 16px; }
+      .product { display: flex; flex-direction: column; min-width: 0; padding: 20px; }
+      .product h3 { margin: 14px 0 8px; }
+      .product p { flex: 1; color: var(--muted); overflow-wrap: anywhere; }
+      .category, .role, .state { display: inline-block; width: max-content; padding: 3px 9px; border: 1px solid var(--border); border-radius: 999px; color: var(--accent); font-size: .75rem; font-weight: 800; letter-spacing: .03em; }
+      .price { margin: 20px 0 12px; font-size: 1.3rem; font-weight: 800; }
+      .product .button { width: 100%; }
+
+      .button { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 44px; padding: 9px 15px; border: 1px solid var(--accent); border-radius: 6px; background: var(--accent); color: var(--accent-ink); font-weight: 800; text-decoration: none; transition: background .15s ease, transform .15s ease; }
+      .button:hover:not(:disabled) { background: #cdf58c; }
+      .button:active:not(:disabled) { transform: translateY(1px); }
+      .button.secondary { border-color: var(--border); background: transparent; color: var(--text); }
+      .button.secondary:hover:not(:disabled) { border-color: var(--accent); background: var(--surface-raised); }
+      .button.danger { border-color: var(--danger); background: transparent; color: var(--danger); }
+      .button.small { min-height: 44px; padding: 8px 12px; font-size: .84rem; }
+      .button-row { display: flex; flex-wrap: wrap; gap: 12px; }
+
+      .notice { margin: 16px 0; padding: 12px 16px; border-left: 3px solid var(--warning); background: #252117; color: #f5dc9d; }
+      .status, .error { position: fixed; z-index: 30; right: 20px; bottom: 20px; max-width: min(460px, calc(100vw - 40px)); margin: 0; padding: 12px 16px; border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface-raised); box-shadow: var(--shadow); color: var(--text); }
+      .error { border-color: var(--danger); color: var(--danger); font-weight: 700; }
+      .status:empty, .error:empty { display: none; }
+
+      .dashboard-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+      .stat { padding: 20px; }
+      .stat span { color: var(--muted); font-size: .875rem; }
+      .stat strong { display: block; margin-top: 8px; overflow-wrap: anywhere; font-size: clamp(1.35rem, 3vw, 1.85rem); }
+      .two-up { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+      form { display: grid; gap: 12px; }
+      label { display: grid; gap: 6px; font-weight: 750; }
+      input, textarea, select { width: 100%; padding: 9px 11px; border: 1px solid var(--border); border-radius: 6px; background: #121410; color: var(--text); }
+      input::placeholder, textarea::placeholder { color: #778072; }
+      input:user-invalid,
+      textarea:user-invalid,
+      select:user-invalid { border-color: var(--danger); }
+      textarea { min-height: 108px; resize: vertical; }
+      .help { margin: 0; color: var(--muted); font-size: .875rem; font-weight: 400; }
+      .inline { display: flex; align-items: end; flex-wrap: wrap; gap: 12px; }
+      .inline label { flex: 1 1 220px; }
+
+      .table-wrap { overflow-x: auto; margin: 0 -4px; padding: 0 4px; border-right: 1px solid var(--border); }
+      table { width: 100%; min-width: 640px; border-collapse: collapse; }
+      caption { padding: 0 0 12px; color: var(--muted); text-align: left; }
+      th, td { padding: 12px; border-bottom: 1px solid var(--border); text-align: left; vertical-align: top; }
+      th { color: var(--muted); font-size: .75rem; letter-spacing: .08em; text-transform: uppercase; }
+      td { overflow-wrap: anywhere; }
+      .license { display: block; max-width: 22rem; overflow-wrap: anywhere; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .85rem; }
+      .empty { padding: 20px 0; color: var(--muted); }
+      #products[aria-busy="true"], #dashboardContent[aria-busy="true"] { opacity: .6; }
+
+      dialog { width: min(520px, calc(100% - 32px)); padding: 0; border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface); color: var(--text); box-shadow: 0 24px 60px rgb(0 0 0 / 55%); }
+      dialog::backdrop { background: rgb(0 0 0 / 72%); }
+      .dialog-content { padding: 24px; }
+      .dialog-head { display: flex; align-items: start; justify-content: space-between; gap: 16px; }
+      .close { min-width: 44px; border: 1px solid var(--border); border-radius: 6px; background: transparent; color: var(--text); font-weight: 800; }
+      .tabs { display: flex; gap: 8px; margin-bottom: 16px; border-bottom: 1px solid var(--border); }
+      .tab { min-height: 44px; padding: 8px 12px; border: 0; border-bottom: 3px solid transparent; background: transparent; color: var(--muted); font-weight: 800; }
+      .tab[aria-selected="true"] { border-color: var(--accent); color: var(--text); }
+
       @media (max-width: 800px) {
-        .products {
-          grid-template-columns: repeat(2, minmax(0, 1fr));
-        }
-        .dashboard-grid {
-          grid-template-columns: 1fr;
-        }
-        .two-up {
-          grid-template-columns: 1fr;
+        .header-row { grid-template-columns: auto 1fr; padding: 10px 0; }
+        .header-row nav { justify-self: end; }
+        .header-actions { grid-column: 1 / -1; justify-self: stretch; justify-content: space-between; }
+        .products { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        .dashboard-grid, .two-up { grid-template-columns: 1fr; }
+      }
+
+      @media (max-width: 540px) {
+        .wrap { width: min(100% - 24px, 1160px); }
+        .header-row { gap: 8px; }
+        .brand { font-size: 1rem; }
+        .connection { display: none; }
+        .header-actions { flex-wrap: wrap; gap: 6px; }
+        #accountButton { min-width: 0; max-width: 42vw; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .api-settings { position: static; }
+        .api-settings[open] { order: 3; flex: 0 0 100%; width: 100%; }
+        .api-control { position: static; width: 100%; max-width: 100%; margin-top: 8px; box-shadow: none; }
+        .products { grid-template-columns: 1fr; }
+        .section-head { flex-direction: column; align-items: start; margin-top: 36px; }
+        main { padding-top: 40px; }
+        .button-row .button { flex: 1; }
+        .status, .error { right: 12px; bottom: 12px; max-width: calc(100vw - 24px); }
+      }
+
+      @media (prefers-reduced-motion: no-preference) {
+        dialog[open] { animation: dialog-in .16s ease-out; }
+        @keyframes dialog-in {
+          from { opacity: 0; transform: translateY(8px); }
+          to { opacity: 1; transform: translateY(0); }
         }
       }
-      @media (max-width: 500px) {
-        .wrap {
-          width: min(100% - 1.25rem, 1120px);
-        }
-        .header-row {
-          padding: 0.75rem 0;
-        }
-        .header-actions {
-          margin-left: 0;
-          width: 100%;
-          justify-content: space-between;
-        }
-        .products {
-          grid-template-columns: 1fr;
-        }
-        main {
-          padding-top: 1.75rem;
-        }
-      }
+
       @media (prefers-reduced-motion: reduce) {
-        html {
-          scroll-behavior: auto;
-        }
-        *,
-        *::before,
-        *::after {
-          animation-duration: 0.01ms !important;
-          transition-duration: 0.01ms !important;
-        }
+        html { scroll-behavior: auto; }
+        *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
       }
     </style>
   </head>
@@ -497,7 +295,7 @@
     <a class="skip" href="#main">Skip to main content</a>
     <header class="site-header">
       <div class="wrap header-row">
-        <a class="brand" href="#store">Crudo Store</a>
+        <a class="brand" href="#store" aria-label="Crudo store">Crudo</a>
         <nav aria-label="Primary">
           <a href="#store" data-nav="store" aria-current="page">Store</a
           ><a href="#dashboard" data-nav="dashboard">Dashboard</a>
@@ -511,21 +309,24 @@
             ></span
             ><span id="connectionText">Checking API</span></span
           >
-          <form class="api-control" id="apiForm">
-            <label for="apiUrl"
-              >API base URL<input
-                id="apiUrl"
-                type="url"
-                inputmode="url"
-                aria-describedby="apiHelp"
-                required /></label
-            ><button class="button secondary small" type="submit">
-              Apply API
-            </button>
-            <p class="help" id="apiHelp">
-              Saved only on this device. Apply to reconnect and refresh.
-            </p>
-          </form>
+          <details class="api-settings">
+            <summary>API settings</summary>
+            <form class="api-control" id="apiForm">
+              <label for="apiUrl"
+                >API base URL<input
+                  id="apiUrl"
+                  type="url"
+                  inputmode="url"
+                  aria-describedby="apiHelp"
+                  required /></label
+              ><button class="button secondary small" type="submit">
+                Apply API
+              </button>
+              <p class="help" id="apiHelp">
+                Saved only on this device. Apply to reconnect and refresh.
+              </p>
+            </form>
+          </details>
           <button
             class="button secondary small"
             id="accountButton"
@@ -554,13 +355,18 @@
       ></div>
       <section class="view" id="storeView" aria-labelledby="storeTitle">
         <div class="intro">
-          <h1 id="storeTitle">Digital goods, delivered clearly.</h1>
+          <p class="eyebrow">Digital catalog</p>
+          <h1 id="storeTitle">Digital goods, without the clutter.</h1>
           <p class="lede">
-            Browse available products and purchase securely from your account
-            balance.
+            Browse available products, then manage purchases and account activity
+            from one focused dashboard.
           </p>
+          <div class="button-row hero-actions">
+            <a class="button" href="#catalog">Browse catalog</a>
+            <a class="button secondary" href="#dashboard">Open dashboard</a>
+          </div>
         </div>
-        <div class="section-head">
+        <div class="section-head" id="catalog">
           <h2>Products</h2>
           <button
             class="button secondary small"
@@ -770,9 +576,11 @@
           button.dataset.label = button.textContent;
           button.textContent = label;
           button.disabled = true;
+          button.setAttribute("aria-busy", "true");
         } else {
           button.textContent = button.dataset.label || button.textContent;
           button.disabled = false;
+          button.removeAttribute("aria-busy");
         }
       }
       function basic(identifier, password) {
@@ -898,6 +706,8 @@
           );
       }
       async function loadProducts(announce = false) {
+        const root = $("#products");
+        root.setAttribute("aria-busy", "true");
         message("");
         try {
           const products = await api("/products", {
@@ -912,6 +722,8 @@
           state.products = [];
           renderProducts();
           message(error.message, true);
+        } finally {
+          root.setAttribute("aria-busy", "false");
         }
       }
       function switchView(name) {
@@ -1208,6 +1020,7 @@
       }
       async function loadCustomerTransactions(root) {
         if (!root || !state.me || state.me.role === "admin") return;
+        root.setAttribute("aria-busy", "true");
         try {
           const items = await api("/transactions");
           clear(root);
@@ -1237,6 +1050,8 @@
           );
         } catch (error) {
           message(error.message, true);
+        } finally {
+          root.setAttribute("aria-busy", "false");
         }
       }
       function adminDashboard() {
@@ -1323,6 +1138,8 @@
         );
       }
       async function loadAdmin(stats, users, tx, products) {
+        const dashboard = $("#dashboardContent");
+        dashboard.setAttribute("aria-busy", "true");
         try {
           const [summary, userList, transactions, productList] =
             await Promise.all([
@@ -1428,6 +1245,8 @@
           renderAdminProducts();
         } catch (error) {
           message(error.message, true);
+        } finally {
+          dashboard.setAttribute("aria-busy", "false");
         }
       }
       function productForm(product = null) {
@@ -1714,8 +1533,11 @@
         renderDashboard();
       }
       async function refreshDashboard() {
+        const root = $("#dashboardContent");
+        root.setAttribute("aria-busy", "true");
         if (!state.token) {
           renderDashboard();
+          root.setAttribute("aria-busy", "false");
           return;
         }
         try {
@@ -1733,14 +1555,32 @@
         } catch (error) {
           setConnection(false);
           message(error.message, true);
+        } finally {
+          root.setAttribute("aria-busy", "false");
         }
       }
       $("#accountButton").addEventListener("click", () =>
         state.me ? (location.hash = "#dashboard") : openAuth(),
       );
       $("#signOutButton").addEventListener("click", () => logout());
-      $("#refreshProducts").addEventListener("click", () => loadProducts(true));
-      $("#refreshDashboard").addEventListener("click", refreshDashboard);
+      $("#refreshProducts").addEventListener("click", async (event) => {
+        const button = event.currentTarget;
+        setBusy(button, true, "Refreshing products…");
+        try {
+          await loadProducts(true);
+        } finally {
+          setBusy(button, false);
+        }
+      });
+      $("#refreshDashboard").addEventListener("click", async (event) => {
+        const button = event.currentTarget;
+        setBusy(button, true, "Refreshing dashboard…");
+        try {
+          await refreshDashboard();
+        } finally {
+          setBusy(button, false);
+        }
+      });
       $("#apiForm").addEventListener("submit", async (event) => {
         event.preventDefault();
         const input = $("#apiUrl"),
@@ -1761,6 +1601,7 @@
         localStorage.setItem("crudo.api", value);
         await loadProducts(true);
         if (state.token) await refreshDashboard();
+        $(".api-settings").open = false;
       });
 
       document
@@ -1893,8 +1734,6 @@
       window.addEventListener("hashchange", () =>
         switchView(location.hash === "#dashboard" ? "dashboard" : "store"),
       );
-      $("#storeView").addEventListener("click", () => {});
-
       (async () => {
         $("#apiUrl").value = state.api;
         renderHeader();
