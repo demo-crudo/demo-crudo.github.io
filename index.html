@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="application-version" content="0.4.0" />
+    <meta name="application-version" content="0.4.1" />
     <meta name="color-scheme" content="dark" />
     <meta name="theme-color" content="#10110f" />
     <title>Crudo Store</title>
@@ -25,41 +25,86 @@
         --radius: 8px;
       }
 
-      * { box-sizing: border-box; }
+      * {
+        box-sizing: border-box;
+      }
 
-      html { scroll-behavior: smooth; }
+      html {
+        scroll-behavior: smooth;
+      }
 
       body {
         margin: 0;
         background: var(--bg);
         color: var(--text);
-        font: 16px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif;
+        font:
+          16px/1.5 system-ui,
+          -apple-system,
+          "Segoe UI",
+          sans-serif;
         font-variant-numeric: tabular-nums;
       }
 
       button,
       input,
       textarea,
-      select { min-height: 44px; font: inherit; color-scheme: dark; }
+      select {
+        min-height: 44px;
+        font: inherit;
+        color-scheme: dark;
+      }
 
-      button { cursor: pointer; }
-      button:disabled { cursor: wait; opacity: .55; }
-      a { color: var(--accent); }
-      p { max-width: 72ch; }
-      h1, h2, h3, p { margin-top: 0; }
-      h1, h2, h3 { letter-spacing: -.035em; line-height: 1.12; }
-      h1 { margin-bottom: 16px; font-size: clamp(2.3rem, 6vw, 4.25rem); }
-      h2 { margin-bottom: 12px; font-size: 1.5rem; }
-      h3 { font-size: 1.05rem; }
+      button {
+        cursor: pointer;
+      }
+      button:disabled {
+        cursor: wait;
+        opacity: 0.55;
+      }
+      a {
+        color: var(--accent);
+      }
+      p {
+        max-width: 72ch;
+      }
+      h1,
+      h2,
+      h3,
+      p {
+        margin-top: 0;
+      }
+      h1,
+      h2,
+      h3 {
+        letter-spacing: -0.035em;
+        line-height: 1.12;
+      }
+      h1 {
+        margin-bottom: 16px;
+        font-size: clamp(2.3rem, 6vw, 4.25rem);
+      }
+      h2 {
+        margin-bottom: 12px;
+        font-size: 1.5rem;
+      }
+      h3 {
+        font-size: 1.05rem;
+      }
 
       button:focus-visible,
       a:focus-visible,
       input:focus-visible,
       textarea:focus-visible,
       select:focus-visible,
-      summary:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
+      summary:focus-visible {
+        outline: 3px solid var(--focus);
+        outline-offset: 3px;
+      }
 
-      [hidden], .view[hidden] { display: none !important; }
+      [hidden],
+      .view[hidden] {
+        display: none !important;
+      }
 
       .skip {
         position: absolute;
@@ -71,9 +116,14 @@
         color: var(--accent-ink);
         font-weight: 800;
       }
-      .skip:focus { top: 16px; }
+      .skip:focus {
+        top: 16px;
+      }
 
-      .wrap { width: min(1160px, calc(100% - 40px)); margin: auto; }
+      .wrap {
+        width: min(1160px, calc(100% - 40px));
+        margin: auto;
+      }
 
       .site-header {
         position: sticky;
@@ -101,7 +151,7 @@
         color: var(--text);
         font-size: 1.1rem;
         font-weight: 800;
-        letter-spacing: -.04em;
+        letter-spacing: -0.04em;
         text-decoration: none;
       }
       .brand::before {
@@ -127,11 +177,14 @@
         padding: 7px 14px;
         border-radius: 5px;
         color: var(--muted);
-        font-size: .875rem;
+        font-size: 0.875rem;
         font-weight: 750;
         text-decoration: none;
       }
-      nav a[aria-current="page"] { background: var(--surface-raised); color: var(--text); }
+      nav a[aria-current="page"] {
+        background: var(--surface-raised);
+        color: var(--text);
+      }
 
       .header-actions {
         display: flex;
@@ -141,12 +194,32 @@
         min-width: 0;
         gap: 8px;
       }
-      .connection { display: flex; align-items: center; gap: 6px; color: var(--muted); font-size: .78rem; white-space: nowrap; }
-      .indicator { width: 9px; height: 9px; border: 2px solid currentColor; border-radius: 50%; }
-      .indicator.online { color: var(--accent); background: var(--accent); }
-      .indicator.offline { color: var(--danger); background: var(--danger); }
+      .connection {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        color: var(--muted);
+        font-size: 0.78rem;
+        white-space: nowrap;
+      }
+      .indicator {
+        width: 9px;
+        height: 9px;
+        border: 2px solid currentColor;
+        border-radius: 50%;
+      }
+      .indicator.online {
+        color: var(--accent);
+        background: var(--accent);
+      }
+      .indicator.offline {
+        color: var(--danger);
+        background: var(--danger);
+      }
 
-      .api-settings { position: relative; }
+      .api-settings {
+        position: relative;
+      }
       .api-settings summary {
         display: flex;
         align-items: center;
@@ -157,14 +230,26 @@
         border-radius: var(--radius);
         color: var(--muted);
         cursor: pointer;
-        font-size: .875rem;
+        font-size: 0.875rem;
         font-weight: 700;
         list-style: none;
       }
-      .api-settings summary::-webkit-details-marker { display: none; }
-      .api-settings summary::after { margin-left: 8px; color: var(--accent); content: "+"; font-size: 1.1rem; }
-      .api-settings[open] summary { background: var(--surface-raised); color: var(--text); }
-      .api-settings[open] summary::after { content: "–"; }
+      .api-settings summary::-webkit-details-marker {
+        display: none;
+      }
+      .api-settings summary::after {
+        margin-left: 8px;
+        color: var(--accent);
+        content: "+";
+        font-size: 1.1rem;
+      }
+      .api-settings[open] summary {
+        background: var(--surface-raised);
+        color: var(--text);
+      }
+      .api-settings[open] summary::after {
+        content: "–";
+      }
       .api-control {
         position: absolute;
         z-index: 11;
@@ -179,115 +264,521 @@
         background: var(--surface-raised);
         box-shadow: var(--shadow);
       }
-      .api-control label { font-size: .875rem; }
-      .api-control .help { margin: 0; }
+      .api-control label {
+        font-size: 0.875rem;
+      }
+      .api-control .help {
+        margin: 0;
+      }
 
-      main { padding: 56px 0 72px; }
-      .intro { max-width: 720px; margin-bottom: 48px; }
-      .eyebrow { margin-bottom: 12px; color: var(--accent); font-size: .78rem; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
-      .lede, .muted { color: var(--muted); font-size: 1.08rem; }
-      .hero-actions { margin-top: 24px; }
-      .section-head { display: flex; align-items: end; justify-content: space-between; gap: 16px; margin: 48px 0 16px; }
-      .section-head h1, .section-head h2 { margin-bottom: 0; }
+      main {
+        padding: 56px 0 72px;
+      }
+      .intro {
+        max-width: 720px;
+        margin-bottom: 48px;
+      }
+      .eyebrow {
+        margin-bottom: 12px;
+        color: var(--accent);
+        font-size: 0.78rem;
+        font-weight: 800;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+      }
+      .lede,
+      .muted {
+        color: var(--muted);
+        font-size: 1.08rem;
+      }
+      .hero-actions {
+        margin-top: 24px;
+      }
+      .section-head {
+        display: flex;
+        align-items: end;
+        justify-content: space-between;
+        gap: 16px;
+        margin: 48px 0 16px;
+      }
+      .section-head h1,
+      .section-head h2 {
+        margin-bottom: 0;
+      }
 
-      .products { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
-      .card, .panel, .stat { border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface); }
-      .card { transition: border-color .18s ease, box-shadow .18s ease; }
-      .card:hover { border-color: #596250; box-shadow: var(--shadow); }
-      .panel { padding: 20px; margin-top: 16px; }
-      .product { display: flex; flex-direction: column; min-width: 0; padding: 20px; }
-      .product h3 { margin: 14px 0 8px; }
-      .product p { flex: 1; color: var(--muted); overflow-wrap: anywhere; }
-      .category, .role, .state { display: inline-block; width: max-content; padding: 3px 9px; border: 1px solid var(--border); border-radius: 999px; color: var(--accent); font-size: .75rem; font-weight: 800; letter-spacing: .03em; }
-      .price { margin: 20px 0 12px; font-size: 1.3rem; font-weight: 800; }
-      .product .button { width: 100%; }
+      .products {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 16px;
+      }
+      .card,
+      .panel,
+      .stat {
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        background: var(--surface);
+      }
+      .card {
+        transition:
+          border-color 0.18s ease,
+          box-shadow 0.18s ease;
+      }
+      .card:hover {
+        border-color: #596250;
+        box-shadow: var(--shadow);
+      }
+      .panel {
+        padding: 20px;
+        margin-top: 16px;
+      }
+      .product {
+        display: flex;
+        flex-direction: column;
+        min-width: 0;
+        padding: 20px;
+      }
+      .product h3 {
+        margin: 14px 0 8px;
+      }
+      .product p {
+        flex: 1;
+        color: var(--muted);
+        overflow-wrap: anywhere;
+      }
+      .category,
+      .role,
+      .state {
+        display: inline-block;
+        width: max-content;
+        padding: 3px 9px;
+        border: 1px solid var(--border);
+        border-radius: 999px;
+        color: var(--accent);
+        font-size: 0.75rem;
+        font-weight: 800;
+        letter-spacing: 0.03em;
+      }
+      .price {
+        margin: 20px 0 12px;
+        font-size: 1.3rem;
+        font-weight: 800;
+      }
+      .product .button {
+        width: 100%;
+      }
 
-      .button { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 44px; padding: 9px 15px; border: 1px solid var(--accent); border-radius: 6px; background: var(--accent); color: var(--accent-ink); font-weight: 800; text-decoration: none; transition: background .15s ease, transform .15s ease; }
-      .button:hover:not(:disabled) { background: #cdf58c; }
-      .button:active:not(:disabled) { transform: translateY(1px); }
-      .button.secondary { border-color: var(--border); background: transparent; color: var(--text); }
-      .button.secondary:hover:not(:disabled) { border-color: var(--accent); background: var(--surface-raised); }
-      .button.danger { border-color: var(--danger); background: transparent; color: var(--danger); }
-      .button.small { min-height: 44px; padding: 8px 12px; font-size: .84rem; }
-      .button-row { display: flex; flex-wrap: wrap; gap: 12px; }
+      .button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        min-height: 44px;
+        padding: 9px 15px;
+        border: 1px solid var(--accent);
+        border-radius: 6px;
+        background: var(--accent);
+        color: var(--accent-ink);
+        font-weight: 800;
+        text-decoration: none;
+        transition:
+          background 0.15s ease,
+          transform 0.15s ease;
+      }
+      .button:hover:not(:disabled) {
+        background: #cdf58c;
+      }
+      .button:active:not(:disabled) {
+        transform: translateY(1px);
+      }
+      .button.secondary {
+        border-color: var(--border);
+        background: transparent;
+        color: var(--text);
+      }
+      .button.secondary:hover:not(:disabled) {
+        border-color: var(--accent);
+        background: var(--surface-raised);
+      }
+      .button.danger {
+        border-color: var(--danger);
+        background: transparent;
+        color: var(--danger);
+      }
+      .button.small {
+        min-height: 44px;
+        padding: 8px 12px;
+        font-size: 0.84rem;
+      }
+      .button-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+      }
 
-      .notice { margin: 16px 0; padding: 12px 16px; border-left: 3px solid var(--warning); background: #252117; color: #f5dc9d; }
-      .status, .error { position: fixed; z-index: 30; right: 20px; bottom: 20px; max-width: min(460px, calc(100vw - 40px)); margin: 0; padding: 12px 16px; border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface-raised); box-shadow: var(--shadow); color: var(--text); }
-      .error { border-color: var(--danger); color: var(--danger); font-weight: 700; }
-      .status:empty, .error:empty { display: none; }
+      .notice {
+        margin: 16px 0;
+        padding: 12px 16px;
+        border-left: 3px solid var(--warning);
+        background: #252117;
+        color: #f5dc9d;
+      }
+      .form-error {
+        margin: 0;
+        color: var(--danger);
+        font-weight: 700;
+      }
+      .auth-context {
+        margin: 0 0 16px;
+        padding: 12px;
+        border-left: 3px solid var(--accent);
+        background: var(--surface-raised);
+      }
+      .proof-status {
+        margin: 0;
+        color: var(--muted);
+        font-size: 0.875rem;
+      }
+      .proof-status[data-state="error"] {
+        color: var(--danger);
+        font-weight: 700;
+      }
+      .payment-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 12px;
+      }
+      .payment-card {
+        padding: 14px;
+      }
+      .payment-card h3 {
+        margin-bottom: 8px;
+      }
+      .payment-card dl,
+      .payment-details dl {
+        display: grid;
+        grid-template-columns: max-content minmax(0, 1fr);
+        gap: 6px 10px;
+        margin: 0;
+        font-size: 0.875rem;
+      }
+      .payment-card dt,
+      .payment-details dt {
+        color: var(--muted);
+      }
+      .payment-card dd,
+      .payment-details dd {
+        margin: 0;
+        overflow-wrap: anywhere;
+      }
+      .insufficient {
+        margin: 16px 0;
+        padding: 16px;
+        border: 1px solid var(--warning);
+        border-radius: var(--radius);
+        background: #252117;
+      }
+      .status,
+      .error {
+        position: fixed;
+        z-index: 30;
+        right: 20px;
+        bottom: 20px;
+        max-width: min(460px, calc(100vw - 40px));
+        margin: 0;
+        padding: 12px 16px;
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        background: var(--surface-raised);
+        box-shadow: var(--shadow);
+        color: var(--text);
+      }
+      .error {
+        border-color: var(--danger);
+        color: var(--danger);
+        font-weight: 700;
+      }
+      .status:empty,
+      .error:empty {
+        display: none;
+      }
 
-      .dashboard-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
-      .stat { padding: 20px; }
-      .stat span { color: var(--muted); font-size: .875rem; }
-      .stat strong { display: block; margin-top: 8px; overflow-wrap: anywhere; font-size: clamp(1.35rem, 3vw, 1.85rem); }
-      .two-up { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
-      form { display: grid; gap: 12px; }
-      label { display: grid; gap: 6px; font-weight: 750; }
-      input, textarea, select { width: 100%; padding: 9px 11px; border: 1px solid var(--border); border-radius: 6px; background: #121410; color: var(--text); }
-      input::placeholder, textarea::placeholder { color: #778072; }
+      .dashboard-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 16px;
+      }
+      .stat {
+        padding: 20px;
+      }
+      .stat span {
+        color: var(--muted);
+        font-size: 0.875rem;
+      }
+      .stat strong {
+        display: block;
+        margin-top: 8px;
+        overflow-wrap: anywhere;
+        font-size: clamp(1.35rem, 3vw, 1.85rem);
+      }
+      .two-up {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 16px;
+      }
+      form {
+        display: grid;
+        gap: 12px;
+      }
+      label {
+        display: grid;
+        gap: 6px;
+        font-weight: 750;
+      }
+      input,
+      textarea,
+      select {
+        width: 100%;
+        padding: 9px 11px;
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        background: #121410;
+        color: var(--text);
+      }
+      input::placeholder,
+      textarea::placeholder {
+        color: #778072;
+      }
       input:user-invalid,
       textarea:user-invalid,
-      select:user-invalid { border-color: var(--danger); }
-      textarea { min-height: 108px; resize: vertical; }
-      .help { margin: 0; color: var(--muted); font-size: .875rem; font-weight: 400; }
-      .inline { display: flex; align-items: end; flex-wrap: wrap; gap: 12px; }
-      .inline label { flex: 1 1 220px; }
+      select:user-invalid {
+        border-color: var(--danger);
+      }
+      textarea {
+        min-height: 108px;
+        resize: vertical;
+      }
+      .help {
+        margin: 0;
+        color: var(--muted);
+        font-size: 0.875rem;
+        font-weight: 400;
+      }
+      .inline {
+        display: flex;
+        align-items: end;
+        flex-wrap: wrap;
+        gap: 12px;
+      }
+      .inline label {
+        flex: 1 1 220px;
+      }
 
-      .table-wrap { overflow-x: auto; margin: 0 -4px; padding: 0 4px; border-right: 1px solid var(--border); }
-      table { width: 100%; min-width: 640px; border-collapse: collapse; }
-      caption { padding: 0 0 12px; color: var(--muted); text-align: left; }
-      th, td { padding: 12px; border-bottom: 1px solid var(--border); text-align: left; vertical-align: top; }
-      th { color: var(--muted); font-size: .75rem; letter-spacing: .08em; text-transform: uppercase; }
-      td { overflow-wrap: anywhere; }
-      .license { display: block; max-width: 22rem; overflow-wrap: anywhere; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .85rem; }
-      .empty { padding: 20px 0; color: var(--muted); }
-      #products[aria-busy="true"], #dashboardContent[aria-busy="true"] { opacity: .6; }
+      .table-wrap {
+        overflow-x: auto;
+        margin: 0 -4px;
+        padding: 0 4px;
+        border-right: 1px solid var(--border);
+      }
+      table {
+        width: 100%;
+        min-width: 640px;
+        border-collapse: collapse;
+      }
+      caption {
+        padding: 0 0 12px;
+        color: var(--muted);
+        text-align: left;
+      }
+      th,
+      td {
+        padding: 12px;
+        border-bottom: 1px solid var(--border);
+        text-align: left;
+        vertical-align: top;
+      }
+      th {
+        color: var(--muted);
+        font-size: 0.75rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+      td {
+        overflow-wrap: anywhere;
+      }
+      .license {
+        display: block;
+        max-width: 22rem;
+        overflow-wrap: anywhere;
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        font-size: 0.85rem;
+      }
+      .empty {
+        padding: 20px 0;
+        color: var(--muted);
+      }
+      #products[aria-busy="true"],
+      #dashboardContent[aria-busy="true"] {
+        opacity: 0.6;
+      }
 
-      dialog { width: min(520px, calc(100% - 32px)); padding: 0; border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface); color: var(--text); box-shadow: 0 24px 60px rgb(0 0 0 / 55%); }
-      dialog::backdrop { background: rgb(0 0 0 / 72%); }
-      .dialog-content { padding: 24px; }
-      .dialog-head { display: flex; align-items: start; justify-content: space-between; gap: 16px; }
-      .close { min-width: 44px; border: 1px solid var(--border); border-radius: 6px; background: transparent; color: var(--text); font-weight: 800; }
-      .tabs { display: flex; gap: 8px; margin-bottom: 16px; border-bottom: 1px solid var(--border); }
-      .tab { min-height: 44px; padding: 8px 12px; border: 0; border-bottom: 3px solid transparent; background: transparent; color: var(--muted); font-weight: 800; }
-      .tab[aria-selected="true"] { border-color: var(--accent); color: var(--text); }
+      dialog {
+        width: min(520px, calc(100% - 32px));
+        padding: 0;
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        background: var(--surface);
+        color: var(--text);
+        box-shadow: 0 24px 60px rgb(0 0 0 / 55%);
+      }
+      dialog::backdrop {
+        background: rgb(0 0 0 / 72%);
+      }
+      .dialog-content {
+        padding: 24px;
+      }
+      .dialog-head {
+        display: flex;
+        align-items: start;
+        justify-content: space-between;
+        gap: 16px;
+      }
+      .close {
+        min-width: 44px;
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        background: transparent;
+        color: var(--text);
+        font-weight: 800;
+      }
+      .tabs {
+        display: flex;
+        gap: 8px;
+        margin-bottom: 16px;
+        border-bottom: 1px solid var(--border);
+      }
+      .tab {
+        min-height: 44px;
+        padding: 8px 12px;
+        border: 0;
+        border-bottom: 3px solid transparent;
+        background: transparent;
+        color: var(--muted);
+        font-weight: 800;
+      }
+      .tab[aria-selected="true"] {
+        border-color: var(--accent);
+        color: var(--text);
+      }
 
       @media (max-width: 800px) {
-        .header-row { grid-template-columns: auto 1fr; padding: 10px 0; }
-        .header-row nav { justify-self: end; }
-        .header-actions { grid-column: 1 / -1; justify-self: stretch; justify-content: space-between; }
-        .products { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-        .dashboard-grid, .two-up { grid-template-columns: 1fr; }
+        .header-row {
+          grid-template-columns: auto 1fr;
+          padding: 10px 0;
+        }
+        .header-row nav {
+          justify-self: end;
+        }
+        .header-actions {
+          grid-column: 1 / -1;
+          justify-self: stretch;
+          justify-content: space-between;
+        }
+        .products {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+        .dashboard-grid,
+        .two-up {
+          grid-template-columns: 1fr;
+        }
       }
 
       @media (max-width: 540px) {
-        .wrap { width: min(100% - 24px, 1160px); }
-        .header-row { gap: 8px; }
-        .brand { font-size: 1rem; }
-        .connection { display: none; }
-        .header-actions { flex-wrap: wrap; gap: 6px; }
-        #accountButton { min-width: 0; max-width: 42vw; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-        .api-settings { position: static; }
-        .api-settings[open] { order: 3; flex: 0 0 100%; width: 100%; }
-        .api-control { position: static; width: 100%; max-width: 100%; margin-top: 8px; box-shadow: none; }
-        .products { grid-template-columns: 1fr; }
-        .section-head { flex-direction: column; align-items: start; margin-top: 36px; }
-        main { padding-top: 40px; }
-        .button-row .button { flex: 1; }
-        .status, .error { right: 12px; bottom: 12px; max-width: calc(100vw - 24px); }
+        .wrap {
+          width: min(100% - 24px, 1160px);
+        }
+        .header-row {
+          gap: 8px;
+        }
+        .brand {
+          font-size: 1rem;
+        }
+        .connection {
+          display: none;
+        }
+        .header-actions {
+          flex-wrap: wrap;
+          gap: 6px;
+        }
+        #accountButton {
+          min-width: 0;
+          max-width: 42vw;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+        .api-settings {
+          position: static;
+        }
+        .api-settings[open] {
+          order: 3;
+          flex: 0 0 100%;
+          width: 100%;
+        }
+        .api-control {
+          position: static;
+          width: 100%;
+          max-width: 100%;
+          margin-top: 8px;
+          box-shadow: none;
+        }
+        .products {
+          grid-template-columns: 1fr;
+        }
+        .section-head {
+          flex-direction: column;
+          align-items: start;
+          margin-top: 36px;
+        }
+        main {
+          padding-top: 40px;
+        }
+        .button-row .button {
+          flex: 1;
+        }
+        .status,
+        .error {
+          right: 12px;
+          bottom: 12px;
+          max-width: calc(100vw - 24px);
+        }
       }
 
       @media (prefers-reduced-motion: no-preference) {
-        dialog[open] { animation: dialog-in .16s ease-out; }
+        dialog[open] {
+          animation: dialog-in 0.16s ease-out;
+        }
         @keyframes dialog-in {
-          from { opacity: 0; transform: translateY(8px); }
-          to { opacity: 1; transform: translateY(0); }
+          from {
+            opacity: 0;
+            transform: translateY(8px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
         }
       }
 
       @media (prefers-reduced-motion: reduce) {
-        html { scroll-behavior: auto; }
-        *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+        html {
+          scroll-behavior: auto;
+        }
+        *,
+        *::before,
+        *::after {
+          animation-duration: 0.01ms !important;
+          transition-duration: 0.01ms !important;
+        }
       }
     </style>
   </head>
@@ -358,8 +849,8 @@
           <p class="eyebrow">Digital catalog</p>
           <h1 id="storeTitle">Digital goods, without the clutter.</h1>
           <p class="lede">
-            Browse available products, then manage purchases and account activity
-            from one focused dashboard.
+            Browse available products, then manage purchases and account
+            activity from one focused dashboard.
           </p>
           <div class="button-row hero-actions">
             <a class="button" href="#catalog">Browse catalog</a>
@@ -438,14 +929,16 @@
             Register
           </button>
         </div>
+        <p id="authContext" class="auth-context" hidden></p>
         <section id="loginPanel" role="tabpanel" aria-labelledby="loginTab">
           <form id="loginForm">
             <label
               >Identifier<input
                 name="identifier"
                 autocomplete="username"
-                required /></label
-            ><label
+                required
+            /></label>
+            <label
               >Password<input
                 name="password"
                 type="password"
@@ -456,6 +949,21 @@
               Demo only: identifier <strong>admin</strong>, password
               <strong>admin</strong>.
             </p>
+            <altcha-widget id="loginAltcha" hidefooter></altcha-widget>
+            <p
+              class="proof-status"
+              id="loginProofStatus"
+              role="status"
+              aria-live="polite"
+            >
+              Loading verification challenge…
+            </p>
+            <p
+              class="form-error"
+              id="loginFormError"
+              role="alert"
+              aria-live="assertive"
+            ></p>
             <button class="button" type="submit">Sign in</button>
           </form>
         </section>
@@ -466,21 +974,46 @@
           hidden
         >
           <form id="registerForm">
-            <label>Name<input name="name" autocomplete="name" required /></label
-            ><label
+            <label
+              >Name<input name="name" autocomplete="name" value="demo" required
+            /></label>
+            <label
               >Email<input
                 name="email"
                 type="email"
                 autocomplete="email"
-                required /></label
-            ><label
+                value="demo@example.com"
+                required
+            /></label>
+            <label
               >Password<input
                 name="password"
                 type="password"
                 autocomplete="new-password"
+                value="demopass"
                 minlength="6"
-                required /></label
-            ><button class="button" type="submit">Create account</button>
+                required
+            /></label>
+            <p class="help">
+              These prefilled values are demo registration defaults; choose
+              unique credentials for any non-demo API.
+            </p>
+            <altcha-widget id="registerAltcha" hidefooter></altcha-widget>
+            <p
+              class="proof-status"
+              id="registerProofStatus"
+              role="status"
+              aria-live="polite"
+            >
+              Loading verification challenge…
+            </p>
+            <p
+              class="form-error"
+              id="registerFormError"
+              role="alert"
+              aria-live="assertive"
+            ></p>
+            <button class="button" type="submit">Create account</button>
           </form>
         </section>
       </div>
@@ -499,6 +1032,7 @@
           </button>
         </div>
         <p id="purchaseDetails"></p>
+        <div id="purchaseError" aria-live="assertive"></div>
         <form method="dialog" id="purchaseForm">
           <div class="button-row">
             <button class="button" value="confirm" type="submit">
@@ -510,8 +1044,29 @@
         </form>
       </div>
     </dialog>
-    <script>
+    <script type="module">
       "use strict";
+
+      let altchaLoadFailed = false;
+      let altchaReady = false;
+      import("https://cdn.jsdelivr.net/npm/altcha@3.2.1/+esm")
+        .then(() => customElements.whenDefined("altcha-widget"))
+        .then(() => {
+          altchaReady = true;
+          configureAltcha();
+        })
+        .catch(() => {
+          altchaLoadFailed = true;
+          document
+            .querySelectorAll("#loginForm, #registerForm")
+            .forEach((form) =>
+              proofStatus(
+                form,
+                "Verification challenge is unavailable. Reload or check your connection.",
+                "error",
+              ),
+            );
+        });
 
       const DEFAULT_API = "http://127.0.0.1:3000/v1";
 
@@ -524,6 +1079,7 @@
         me: null,
         products: [],
         purchase: null,
+        paymentMethods: null,
         returnFocus: null,
       };
 
@@ -543,7 +1099,7 @@
           if (key === "class") node.className = value;
           else if (key === "text") node.textContent = text(value);
           else if (key.startsWith("on"))
-            node.addEventListener(key.slice(2), value);
+            node.addEventListener(key.slice(2).toLowerCase(), value);
           else node.setAttribute(key, text(value));
         });
         node.append(...children);
@@ -587,6 +1143,15 @@
         const bytes = new TextEncoder().encode(`${identifier}:${password}`);
         return "Basic " + btoa(String.fromCharCode(...bytes));
       }
+      class ApiError extends Error {
+        constructor(message, status, body, headers) {
+          super(message);
+          this.name = "ApiError";
+          this.status = status;
+          this.body = body;
+          this.headers = headers;
+        }
+      }
       function logout(note = true) {
         state.token = "";
         state.identifier = "";
@@ -609,8 +1174,11 @@
             headers,
           });
         } catch {
-          throw new Error(
+          throw new ApiError(
             "Could not reach the API. Check that the server is running and the API URL is correct.",
+            0,
+            null,
+            new Headers(),
           );
         }
         const raw = await response.text();
@@ -622,14 +1190,195 @@
         }
         if (response.status === 401 && options.auth !== false) {
           logout(false);
-          throw new Error("Your session has expired. Please sign in again.");
+          throw new ApiError(
+            "Your session has expired. Please sign in again.",
+            response.status,
+            data,
+            response.headers,
+          );
         }
         if (!response.ok)
-          throw new Error(
-            text(data && (data.error || data.message)) ||
+          throw new ApiError(
+            (typeof data === "string"
+              ? data
+              : text(data && (data.error || data.message))) ||
               `Request failed (${response.status}).`,
+            response.status,
+            data,
+            response.headers,
           );
         return data;
+      }
+      function challengeUrl() {
+        return `${base()}/challenge`;
+      }
+      function proofStatus(form, value, state = "") {
+        const status = form.querySelector(".proof-status");
+        if (!status) return;
+        status.textContent = value;
+        status.dataset.state = state;
+      }
+      function resetProof(form) {
+        const widget = form.querySelector("altcha-widget");
+        if (widget) widget.dataset.verified = "false";
+        if (altchaReady) widget?.reset?.();
+        proofStatus(form, "Complete the verification challenge to submit.");
+      }
+      function configureAltcha() {
+        document.querySelectorAll("altcha-widget").forEach((widget) => {
+          const form = widget.closest("form");
+          if (!form) return;
+          if (altchaLoadFailed) {
+            proofStatus(
+              form,
+              "Verification challenge is unavailable. Reload or check your connection.",
+              "error",
+            );
+            return;
+          }
+          if (!altchaReady) {
+            proofStatus(form, "Loading verification challenge…");
+            return;
+          }
+          widget.dataset.verified = "false";
+          Promise.resolve(widget.configure({ challenge: challengeUrl() }))
+            .then(() => resetProof(form))
+            .catch(() =>
+              proofStatus(
+                form,
+                "Verification challenge is unavailable. Reload or check your connection.",
+                "error",
+              ),
+            );
+        });
+      }
+      function setupAltcha() {
+        document.querySelectorAll("altcha-widget").forEach((widget) => {
+          const form = widget.closest("form");
+          if (!form) return;
+          widget.addEventListener("verified", () => {
+            widget.dataset.verified = "true";
+            proofStatus(form, "Verification complete.");
+          });
+          widget.addEventListener("error", () =>
+            proofStatus(
+              form,
+              "Verification failed. Reset the challenge and try again.",
+              "error",
+            ),
+          );
+          widget.addEventListener("statechange", (event) => {
+            const stateName = text(event.detail?.state).toLowerCase();
+            if (stateName === "verified") {
+              widget.dataset.verified = "true";
+              proofStatus(form, "Verification complete.");
+            } else if (stateName === "error")
+              proofStatus(
+                form,
+                "Verification failed. Reset the challenge and try again.",
+                "error",
+              );
+          });
+        });
+        configureAltcha();
+      }
+      function verifiedProof(form) {
+        const widget = form.querySelector("altcha-widget");
+        const proof = new FormData(form).get("altcha");
+        if (altchaLoadFailed || !altchaReady || !widget) {
+          proofStatus(
+            form,
+            "Verification challenge is unavailable. Reload or check your connection.",
+            "error",
+          );
+          return null;
+        }
+        if (
+          !proof ||
+          !text(proof).trim() ||
+          widget.dataset.verified !== "true"
+        ) {
+          proofStatus(
+            form,
+            "Complete and verify the challenge before submitting.",
+            "error",
+          );
+          return null;
+        }
+        return text(proof);
+      }
+      function paymentValue(value) {
+        return typeof value === "object" && value !== null
+          ? JSON.stringify(value)
+          : text(value);
+      }
+      function paymentDetails(data) {
+        const list = el("dl");
+        Object.entries(data || {}).forEach(([key, value]) => {
+          if (value === null || value === undefined) return;
+          list.append(
+            el("dt", { text: summaryLabel(key) }),
+            el("dd", { text: paymentValue(value) }),
+          );
+        });
+        return list.childElementCount
+          ? list
+          : el("p", {
+              class: "help",
+              text: "No additional payment details were supplied.",
+            });
+      }
+      function supportedPayments() {
+        const section = el(
+          "section",
+          { class: "panel", "aria-labelledby": "paymentsTitle" },
+          [el("h2", { id: "paymentsTitle", text: "Supported payments" })],
+        );
+        if (state.paymentMethods === null) {
+          section.append(
+            el("p", {
+              class: "help",
+              text: "Payment capabilities are unavailable right now.",
+            }),
+          );
+          return section;
+        }
+        if (!state.paymentMethods.length) {
+          section.append(
+            el("p", {
+              class: "help",
+              text: "No payment capabilities are currently available.",
+            }),
+          );
+          return section;
+        }
+        const grid = el("div", { class: "payment-grid" });
+        state.paymentMethods.forEach((method) => {
+          const title =
+            method.token_name ||
+            method.name ||
+            method.token ||
+            method.asset ||
+            method.scheme ||
+            "Payment method";
+          grid.append(
+            el("article", { class: "card payment-card" }, [
+              el("h3", { text: title }),
+              paymentDetails(method),
+            ]),
+          );
+        });
+        section.append(grid);
+        return section;
+      }
+      async function loadPaymentMethods() {
+        try {
+          const methods = await api("/payment-methods", { auth: false });
+          state.paymentMethods = Array.isArray(methods) ? methods : [];
+        } catch {
+          state.paymentMethods = null;
+        }
+        renderDashboard();
       }
       function setConnection(online) {
         $("#connectionDot").className =
@@ -844,7 +1593,7 @@
       function dashboardShell(children) {
         const root = $("#dashboardContent");
         clear(root);
-        root.append(...children);
+        root.append(...children, supportedPayments());
       }
       function renderDashboard() {
         $("#dashboardLead").textContent = state.me
@@ -1507,6 +2256,11 @@
       }
       function openAuth() {
         state.returnFocus = document.activeElement;
+        const context = $("#authContext");
+        if (state.purchase) {
+          context.hidden = false;
+          context.textContent = `To purchase ${text(state.purchase.name)} for ${cents(state.purchase.price)}, register or sign in first. Your selection will be retained.`;
+        } else context.hidden = true;
         $("#authDialog").showModal();
         $("#loginForm input").focus();
       }
@@ -1515,17 +2269,100 @@
         state.returnFocus?.focus?.();
       }
       function startPurchase(product) {
+        state.purchase = product;
         if (!state.me) {
-          message("Sign in before making a purchase.");
+          message(`Sign in or register to purchase ${text(product.name)}.`);
           openAuth();
           return;
         }
-        state.purchase = product;
+        $("#purchaseError").replaceChildren();
         $("#purchaseDetails").textContent =
           `Buy ${text(product.name)} for ${cents(product.price)}? Your account balance will be charged.`;
         state.returnFocus = document.activeElement;
         $("#purchaseDialog").showModal();
         $("#purchaseForm button[value=confirm]").focus();
+      }
+      function showInsufficientBalance(error, product) {
+        const panel = el(
+          "section",
+          {
+            class: "insufficient",
+            role: "alert",
+            "aria-labelledby": "insufficientTitle",
+          },
+          [
+            el("h3", { id: "insufficientTitle", text: "Insufficient balance" }),
+            el("p", {
+              text: "Your account does not have enough balance to complete this purchase.",
+            }),
+            el("p", {
+              text: `Current balance: ${cents(state.me?.balance)}. Product price: ${cents(product.price)}. Additional balance needed: ${cents(Math.max(0, Number(product.price || 0) - Number(state.me?.balance || 0)))}.`,
+            }),
+          ],
+        );
+        const add = el("button", {
+          class: "button",
+          type: "button",
+          text: "Add balance",
+          onClick: () => {
+            $("#purchaseDialog").close();
+            location.hash = "#dashboard";
+            requestAnimationFrame(() => {
+              const amount =
+                $(
+                  "#customerTransactions",
+                )?.previousElementSibling?.querySelector(
+                  "input[name=amount]",
+                ) || $("#dashboardContent input[name=amount]");
+              if (amount) {
+                amount.value = String(
+                  Math.max(
+                    1,
+                    Number(product.price || 0) - Number(state.me?.balance || 0),
+                  ),
+                );
+                amount.focus();
+              }
+            });
+          },
+        });
+        panel.append(add);
+        const body = error.body;
+        const accepted = body?.accepts ?? body?.payment_methods;
+        const choices = Array.isArray(body)
+          ? body
+          : Array.isArray(accepted)
+            ? accepted
+            : accepted
+              ? [accepted]
+              : body && typeof body === "object"
+                ? [body]
+                : [];
+        if (choices.length) {
+          const choicesPanel = el("div", { class: "payment-details" }, [
+            el("h3", { text: "Accepted payment options" }),
+          ]);
+          choices.forEach((choice) =>
+            choicesPanel.append(paymentDetails(choice)),
+          );
+          panel.append(choicesPanel);
+        }
+        const destinations = body?.extensions?.deposit?.info?.destinations;
+        const destinationList = Array.isArray(destinations)
+          ? destinations
+          : destinations
+            ? [destinations]
+            : [];
+        if (destinationList.length) {
+          const destinationPanel = el("div", { class: "payment-details" }, [
+            el("h3", { text: "Payment destinations" }),
+          ]);
+          destinationList.forEach((destination) =>
+            destinationPanel.append(paymentDetails(destination)),
+          );
+          panel.append(destinationPanel);
+        }
+        $("#purchaseError").replaceChildren(panel);
       }
       async function loadMe() {
         state.me = await api("/me");
@@ -1599,7 +2436,9 @@
         }
         state.api = value;
         localStorage.setItem("crudo.api", value);
+        configureAltcha();
         await loadProducts(true);
+        await loadPaymentMethods();
         if (state.token) await refreshDashboard();
         $(".api-settings").open = false;
       });
@@ -1647,6 +2486,14 @@
         const form = event.currentTarget,
           button = form.querySelector("button"),
           data = new FormData(form);
+        $("#loginFormError").textContent = "";
+        const proof = verifiedProof(form);
+        if (!proof) {
+          $("#loginFormError").textContent =
+            "Verification is required before signing in.";
+          resetProof(form);
+          return;
+        }
         setBusy(button, true, "Signing in…");
         try {
           const identifier = text(data.get("identifier"));
@@ -1656,6 +2503,7 @@
             headers: {
               Authorization: basic(identifier, text(data.get("password"))),
             },
+            body: JSON.stringify({ altcha: proof }),
           });
           if (!result?.token)
             throw new Error("The API did not return a session token.");
@@ -1666,10 +2514,13 @@
           await loadMe();
           $("#authDialog").close();
           message("Signed in.");
+          if (state.purchase) startPurchase(state.purchase);
         } catch (error) {
+          $("#loginFormError").textContent = error.message;
           message(error.message, true);
         } finally {
           setBusy(button, false);
+          resetProof(form);
         }
       });
 
@@ -1678,6 +2529,14 @@
         const form = event.currentTarget,
           button = form.querySelector("button"),
           data = new FormData(form);
+        $("#registerFormError").textContent = "";
+        const proof = verifiedProof(form);
+        if (!proof) {
+          $("#registerFormError").textContent =
+            "Verification is required before creating an account.";
+          resetProof(form);
+          return;
+        }
         setBusy(button, true, "Creating account…");
         try {
           await api("/users", {
@@ -1687,15 +2546,18 @@
               name: data.get("name"),
               email: data.get("email"),
               password: data.get("password"),
+              altcha: proof,
             }),
           });
           setAuthTab("login");
           $("#loginForm [name=identifier]").value = text(data.get("email"));
           message("Account created. Sign in to continue.");
         } catch (error) {
+          $("#registerFormError").textContent = error.message;
           message(error.message, true);
         } finally {
           setBusy(button, false);
+          resetProof(form);
         }
       });
 
@@ -1715,6 +2577,7 @@
             }),
           });
           $("#purchaseDialog").close();
+          state.purchase = null;
           await loadMe();
           if (state.me?.role === "admin") await refreshDashboard();
           else await loadCustomerTransactions($("#customerTransactions"));
@@ -1725,6 +2588,8 @@
               : "Purchase complete. See your transactions for fulfillment.",
           );
         } catch (error) {
+          if (error instanceof ApiError && error.status === 402)
+            showInsufficientBalance(error, product);
           message(error.message, true);
         } finally {
           setBusy(button, false);
@@ -1736,9 +2601,11 @@
       );
       (async () => {
         $("#apiUrl").value = state.api;
+        setupAltcha();
         renderHeader();
         switchView(location.hash === "#dashboard" ? "dashboard" : "store");
         await loadProducts();
+        await loadPaymentMethods();
         if (state.token) {
           try {
             await loadMe();
