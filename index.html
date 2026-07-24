@@ -433,14 +433,8 @@
         border-left: 3px solid var(--accent);
         background: var(--surface-raised);
       }
-      .proof-status {
-        margin: 0;
-        color: var(--muted);
-        font-size: 0.875rem;
-      }
-      .proof-status[data-state="error"] {
-        color: var(--danger);
-        font-weight: 700;
+      altcha-widget {
+        display: none !important;
       }
       .payment-grid {
         display: grid;
@@ -949,15 +943,11 @@
               Demo only: identifier <strong>admin</strong>, password
               <strong>admin</strong>.
             </p>
-            <altcha-widget id="loginAltcha" hidefooter></altcha-widget>
-            <p
-              class="proof-status"
-              id="loginProofStatus"
-              role="status"
-              aria-live="polite"
-            >
-              Loading verification challenge…
-            </p>
+            <altcha-widget
+              id="loginAltcha"
+              display="invisible"
+              aria-hidden="true"
+            ></altcha-widget>
             <p
               class="form-error"
               id="loginFormError"
@@ -998,15 +988,11 @@
               These prefilled values are demo registration defaults; choose
               unique credentials for any non-demo API.
             </p>
-            <altcha-widget id="registerAltcha" hidefooter></altcha-widget>
-            <p
-              class="proof-status"
-              id="registerProofStatus"
-              role="status"
-              aria-live="polite"
-            >
-              Loading verification challenge…
-            </p>
+            <altcha-widget
+              id="registerAltcha"
+              display="invisible"
+              aria-hidden="true"
+            ></altcha-widget>
             <p
               class="form-error"
               id="registerFormError"
@@ -1049,24 +1035,17 @@
 
       let altchaLoadFailed = false;
       let altchaReady = false;
-      import("https://cdn.jsdelivr.net/npm/altcha@3.2.1/+esm")
-        .then(() => customElements.whenDefined("altcha-widget"))
-        .then(() => {
-          altchaReady = true;
-          configureAltcha();
-        })
-        .catch(() => {
-          altchaLoadFailed = true;
-          document
-            .querySelectorAll("#loginForm, #registerForm")
-            .forEach((form) =>
-              proofStatus(
-                form,
-                "Verification challenge is unavailable. Reload or check your connection.",
-                "error",
-              ),
-            );
-        });
+      const altchaLoad =
+        import("https://cdn.jsdelivr.net/npm/altcha@3.2.1/+esm")
+          .then(() => customElements.whenDefined("altcha-widget"))
+          .then(() => {
+            altchaReady = true;
+            return true;
+          })
+          .catch(() => {
+            altchaLoadFailed = true;
+            return false;
+          });
 
       const DEFAULT_API = "http://127.0.0.1:3000/v1";
 
@@ -1077,6 +1056,7 @@
         token: localStorage.getItem("crudo.token") || "",
         identifier: localStorage.getItem("crudo.identifier") || "",
         me: null,
+        addresses: [],
         products: [],
         purchase: null,
         paymentMethods: null,
@@ -1129,7 +1109,8 @@
       }
       function setBusy(button, busy, label) {
         if (busy) {
-          button.dataset.label = button.textContent;
+          if (!button.hasAttribute("aria-busy"))
+            button.dataset.label = button.textContent;
           button.textContent = label;
           button.disabled = true;
           button.setAttribute("aria-busy", "true");
@@ -1156,6 +1137,7 @@
         state.token = "";
         state.identifier = "";
         state.me = null;
+        state.addresses = [];
         localStorage.removeItem("crudo.token");
         localStorage.removeItem("crudo.identifier");
         renderHeader();
@@ -1212,100 +1194,35 @@
       function challengeUrl() {
         return `${base()}/challenge`;
       }
-      function proofStatus(form, value, state = "") {
-        const status = form.querySelector(".proof-status");
-        if (!status) return;
-        status.textContent = value;
-        status.dataset.state = state;
-      }
       function resetProof(form) {
         const widget = form.querySelector("altcha-widget");
-        if (widget) widget.dataset.verified = "false";
         if (altchaReady) widget?.reset?.();
-        proofStatus(form, "Complete the verification challenge to submit.");
       }
-      function configureAltcha() {
-        document.querySelectorAll("altcha-widget").forEach((widget) => {
-          const form = widget.closest("form");
-          if (!form) return;
-          if (altchaLoadFailed) {
-            proofStatus(
-              form,
-              "Verification challenge is unavailable. Reload or check your connection.",
-              "error",
-            );
-            return;
-          }
-          if (!altchaReady) {
-            proofStatus(form, "Loading verification challenge…");
-            return;
-          }
-          widget.dataset.verified = "false";
-          Promise.resolve(widget.configure({ challenge: challengeUrl() }))
-            .then(() => resetProof(form))
-            .catch(() =>
-              proofStatus(
-                form,
-                "Verification challenge is unavailable. Reload or check your connection.",
-                "error",
-              ),
-            );
-        });
+      function resetAltchaProofs() {
+        document
+          .querySelectorAll("altcha-widget")
+          .forEach((widget) => resetProof(widget.closest("form")));
       }
-      function setupAltcha() {
-        document.querySelectorAll("altcha-widget").forEach((widget) => {
-          const form = widget.closest("form");
-          if (!form) return;
-          widget.addEventListener("verified", () => {
-            widget.dataset.verified = "true";
-            proofStatus(form, "Verification complete.");
-          });
-          widget.addEventListener("error", () =>
-            proofStatus(
-              form,
-              "Verification failed. Reset the challenge and try again.",
-              "error",
-            ),
-          );
-          widget.addEventListener("statechange", (event) => {
-            const stateName = text(event.detail?.state).toLowerCase();
-            if (stateName === "verified") {
-              widget.dataset.verified = "true";
-              proofStatus(form, "Verification complete.");
-            } else if (stateName === "error")
-              proofStatus(
-                form,
-                "Verification failed. Reset the challenge and try again.",
-                "error",
-              );
-          });
-        });
-        configureAltcha();
-      }
-      function verifiedProof(form) {
+      async function verifiedProof(form) {
         const widget = form.querySelector("altcha-widget");
-        const proof = new FormData(form).get("altcha");
-        if (altchaLoadFailed || !altchaReady || !widget) {
-          proofStatus(
-            form,
-            "Verification challenge is unavailable. Reload or check your connection.",
-            "error",
+        if (!widget || !(await altchaLoad) || altchaLoadFailed)
+          throw new Error(
+            "The automatic security check is unavailable. Reload or check your connection.",
           );
-          return null;
+        try {
+          await widget.configure({ challenge: challengeUrl() });
+          widget.reset();
+          const result = await widget.verify();
+          const payload = text(
+            result?.payload || new FormData(form).get("altcha"),
+          ).trim();
+          if (payload) return payload;
+        } catch {
+          // The form handler presents the same actionable error for all widget failures.
         }
-        if (
-          !proof ||
-          !text(proof).trim() ||
-          widget.dataset.verified !== "true"
-        ) {
-          proofStatus(
-            form,
-            "Complete and verify the challenge before submitting.",
-            "error",
-          );
-          return null;
-        }
-        return text(proof);
+        throw new Error(
+          "The automatic security check could not be completed. Please try again.",
+        );
       }
       function paymentValue(value) {
         return typeof value === "object" && value !== null
@@ -1680,6 +1597,61 @@
             ),
           ],
         );
+        const addresses = el(
+          "section",
+          {
+            class: "panel",
+            "aria-labelledby": "addressesTitle",
+          },
+          [
+            el("h2", {
+              id: "addressesTitle",
+              text: "Your payment addresses",
+            }),
+            el("p", {
+              class: "notice",
+              text: "These user-specific x402 destinations are provided for integration testing. Sending funds does not automatically add demo credit.",
+            }),
+          ],
+        );
+        if (state.addresses.length) {
+          const grid = el("div", { class: "payment-grid" });
+          state.addresses.forEach((destination) => {
+            const details = el("dl");
+            details.append(
+              el("dt", { text: "Network" }),
+              el("dd", { text: destination.network || "—" }),
+              el("dt", { text: "Address" }),
+              el("dd", {}, [
+                el("code", {
+                  class: "license",
+                  text: destination.address || "—",
+                }),
+              ]),
+            );
+            grid.append(
+              el("article", { class: "card payment-card" }, [
+                el("h3", {
+                  text:
+                    destination.profile === "base"
+                      ? "Base"
+                      : destination.profile === "solana-mainnet"
+                        ? "Solana"
+                        : destination.profile || "Payment address",
+                }),
+                details,
+              ]),
+            );
+          });
+          addresses.append(grid);
+        } else {
+          addresses.append(
+            el("p", {
+              class: "empty",
+              text: "No payment addresses are available for this account.",
+            }),
+          );
+        }
         const topup = el(
           "section",
           {
@@ -1713,7 +1685,7 @@
           ],
         );
         loadCustomerTransactions(transactions);
-        return [balance, topup, transactions];
+        return [balance, addresses, topup, transactions];
       }
       function topUpForm() {
         const form = el("form");
@@ -1882,7 +1854,7 @@
           .replace(/\b\w/g, (letter) => letter.toUpperCase());
       }
       function isMoneySummary(key) {
-        return /balance|revenue|sales|spend|amount|credit|debit|value|earnings|income|cost/i.test(
+        return /balance|revenue|sales|top.?ups?|spend|amount|credit|debit|value|earnings|income|cost/i.test(
           key,
         );
       }
@@ -2366,6 +2338,15 @@
       }
       async function loadMe() {
         state.me = await api("/me");
+        state.addresses = [];
+        if (state.me.role !== "admin") {
+          try {
+            const addresses = await api("/addresses");
+            state.addresses = Array.isArray(addresses) ? addresses : [];
+          } catch {
+            // Older compatible APIs may not expose user payment addresses.
+          }
+        }
         renderHeader();
         renderDashboard();
       }
@@ -2436,7 +2417,7 @@
         }
         state.api = value;
         localStorage.setItem("crudo.api", value);
-        configureAltcha();
+        resetAltchaProofs();
         await loadProducts(true);
         await loadPaymentMethods();
         if (state.token) await refreshDashboard();
@@ -2487,15 +2468,10 @@
           button = form.querySelector("button"),
           data = new FormData(form);
         $("#loginFormError").textContent = "";
-        const proof = verifiedProof(form);
-        if (!proof) {
-          $("#loginFormError").textContent =
-            "Verification is required before signing in.";
-          resetProof(form);
-          return;
-        }
-        setBusy(button, true, "Signing in…");
+        setBusy(button, true, "Checking…");
         try {
+          const proof = await verifiedProof(form);
+          setBusy(button, true, "Signing in…");
           const identifier = text(data.get("identifier"));
           const result = await api("/tokens", {
             method: "POST",
@@ -2530,15 +2506,10 @@
           button = form.querySelector("button"),
           data = new FormData(form);
         $("#registerFormError").textContent = "";
-        const proof = verifiedProof(form);
-        if (!proof) {
-          $("#registerFormError").textContent =
-            "Verification is required before creating an account.";
-          resetProof(form);
-          return;
-        }
-        setBusy(button, true, "Creating account…");
+        setBusy(button, true, "Checking…");
         try {
+          const proof = await verifiedProof(form);
+          setBusy(button, true, "Creating account…");
           await api("/users", {
             method: "POST",
             auth: false,
@@ -2601,7 +2572,6 @@
       );
       (async () => {
         $("#apiUrl").value = state.api;
-        setupAltcha();
         renderHeader();
         switchView(location.hash === "#dashboard" ? "dashboard" : "store");
         await loadProducts();
